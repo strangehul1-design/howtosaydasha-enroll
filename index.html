@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F9D3EE">
+<title>HowToSayDasha — запись на занятия по английскому</title>
+<meta name="description" content="Онлайн-школа английского для детей и взрослых. Соберите свой урок, посмотрите цены и запишитесь на бесплатное пробное занятие.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23FCC336'/%3E%3Ctext x='32' y='28' font-family='Arial' font-weight='700' font-size='22' text-anchor='middle' fill='%230D1216'%3EHT%3C/text%3E%3Ctext x='32' y='50' font-family='Arial' font-weight='700' font-size='22' text-anchor='middle' fill='%230D1216'%3ESD%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0D1216;
+  --cream:#FFFBF5;
+  --pink:#F9D3EE;
+  --tang:#F38C2F;
+  --sun:#FCC336;
+  --coral:#E66541;
+  --sky:#3593D0;
+  --mint:#2DB28C;
+  --line:rgba(13,18,22,.14);
+  --muted:rgba(13,18,22,.62);
+  --display:'Unbounded','Onest',system-ui,sans-serif;
+  --text:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --wrap:1180px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:88px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font:400 1.0625rem/1.55 var(--text);-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+h1,h2,h3,p,ul,dl,dd,figure{margin:0}
+ul{padding:0;list-style:none}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:3px;border-radius:6px}
+
+.wrap{width:min(100% - 32px,var(--wrap));margin-inline:auto}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+h1,h2{font-family:var(--display);font-weight:500;letter-spacing:-.03em;line-height:1.06;text-wrap:balance}
+h2{font-size:clamp(1.7rem,3.4vw,2.6rem)}
+h3{font:700 1.1rem/1.25 var(--text)}
+
+/* ───────── кнопки ───────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+  padding:.95em 1.55em;border-radius:999px;border:2px solid var(--ink);
+  font:600 1rem/1 var(--text);text-decoration:none;cursor:pointer;
+  transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--sun)}
+.btn:active{transform:translate(0,0);box-shadow:none}
+.btn-ink{background:var(--ink);color:var(--cream)}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-ghost:hover{background:var(--cream);box-shadow:4px 4px 0 var(--ink)}
+.btn-sm{padding:.7em 1.15em;font-size:.95rem}
+.btn-block{width:100%}
+
+/* ───────── шапка ───────── */
+.site-header{position:fixed;inset:0 0 auto 0;z-index:20;transition:background-color .2s,box-shadow .2s,backdrop-filter .2s}
+.site-header.is-stuck{background:rgba(255,251,245,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:14px}
+.logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none}
+.logo-mark{font:500 1.15rem/.95 var(--display);letter-spacing:-.04em}
+.logo-name{font:500 .7rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.nav{display:flex;gap:28px;margin-left:auto}
+.nav a{text-decoration:none;font-weight:500;padding-block:6px;background:linear-gradient(var(--ink),var(--ink)) 0 100%/0 2px no-repeat;transition:background-size .2s}
+.nav a:hover{background-size:100% 2px}
+
+/* ───────── hero ───────── */
+.hero{
+  position:relative;overflow:hidden;padding:150px 0 110px;isolation:isolate;
+  background:
+    radial-gradient(44% 46% at 90% 12%,rgba(53,147,208,.30),transparent 72%),
+    radial-gradient(58% 62% at 4% 108%,var(--tang) 0%,rgba(243,140,47,0) 72%),
+    radial-gradient(48% 52% at 74% 112%,var(--sun) 0%,rgba(252,195,54,0) 72%),
+    linear-gradient(180deg,#FCDDF2 0%,var(--pink) 50%,#FDE7DA 100%);
+}
+.hero::before{ /* зерно */
+  content:"";position:absolute;inset:0;z-index:-1;opacity:.35;mix-blend-mode:soft-light;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:120px;z-index:-1;background:linear-gradient(180deg,rgba(255,251,245,0),var(--cream))}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:center}
+.hero h1{font-size:clamp(2.25rem,5.4vw,4.3rem);line-height:1.02;letter-spacing:-.035em}
+.lead{max-width:34em;margin-top:26px;font-size:1.2rem;line-height:1.5}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+
+.hero-stage{position:relative;min-height:430px}
+.blob{position:absolute;inset:8% 4% 6% 12%;border-radius:50%;background:var(--sun)}
+.ring{position:absolute;right:-2%;top:2%;width:112px;height:112px;border-radius:50%;border:16px solid var(--sky)}
+.half{position:absolute;left:2%;bottom:6%;width:96px;height:48px;border-radius:96px 96px 0 0;background:var(--coral);transform:rotate(-14deg)}
+.bubble{position:absolute;border:2px solid var(--ink);opacity:0}
+.bubble-q{left:0;top:15%;background:var(--cream);border-radius:28px 28px 28px 6px;padding:16px 24px 18px;box-shadow:6px 6px 0 var(--ink);display:grid;gap:2px}
+.bubble-q small{font-size:.9rem;font-weight:500;color:var(--muted)}
+.bubble-q strong{font:500 clamp(1.4rem,2.6vw,2rem)/1.1 var(--display);letter-spacing:-.03em}
+.bubble-a{right:0;bottom:20%;background:var(--ink);color:var(--cream);border-radius:28px 28px 6px 28px;padding:20px 30px;font:500 clamp(1.5rem,3vw,2.3rem)/1.1 var(--display);letter-spacing:-.03em;box-shadow:6px 6px 0 var(--coral)}
+.is-playing .bubble-q{animation:bubble-q 4.4s cubic-bezier(.2,.9,.3,1) both}
+.is-playing .bubble-a{animation:bubble-a 4.4s cubic-bezier(.2,.9,.3,1) both}
+@keyframes bubble-q{0%{opacity:0;transform:translateY(14px) scale(.96)}9%,86%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
+@keyframes bubble-a{0%,17%{opacity:0;transform:translateY(10px) scale(.7)}26%{opacity:1;transform:scale(1.05)}31%,86%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
+.sticker{
+  position:absolute;left:6%;bottom:-2%;z-index:2;width:156px;aspect-ratio:1;border-radius:50%;
+  display:grid;place-content:center;text-align:center;text-decoration:none;
+  background:var(--mint);border:2px solid var(--ink);transform:rotate(-9deg);
+  box-shadow:4px 4px 0 var(--ink);transition:transform .2s;
+}
+.sticker:hover{transform:rotate(-3deg) scale(1.05)}
+.sticker small{font-size:.74rem;font-weight:600;line-height:1.2}
+.sticker b{font:600 1.02rem/1.15 var(--display);letter-spacing:-.04em;margin:3px 0}
+.sticker span{font:600 .95rem/1 var(--text);background:var(--ink);color:var(--cream);border-radius:99px;padding:5px 11px;justify-self:center}
+
+/* ───────── почему мы ───────── */
+.why{padding:30px 0 90px}
+.why-list{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.why-list li{padding-top:18px;border-top:4px solid var(--c)}
+.why-list h3{margin-bottom:8px}
+.why-list p{color:var(--muted);font-size:1rem}
+
+/* ───────── секции ───────── */
+.section{padding:0 0 100px}
+.sec-head{display:grid;gap:12px;margin-bottom:36px}
+.sec-head p{max-width:40em;color:var(--muted);font-size:1.1rem}
+
+/* прайс */
+.pb-head,.pb-row{display:grid;grid-template-columns:minmax(0,2.5fr) minmax(0,1.3fr) minmax(0,1.15fr) minmax(0,1.15fr) auto;gap:20px;align-items:center}
+.pb-head{padding:0 22px 12px;font-weight:600;font-size:.95rem;color:var(--muted)}
+.pb-list{display:grid;gap:12px}
+.pb-row{padding:18px 22px;border-radius:26px;background:#fff;border:2px solid var(--line);transition:border-color .16s,box-shadow .16s,transform .16s}
+.pb-row:hover{border-color:var(--ink);box-shadow:5px 5px 0 var(--c,var(--ink));transform:translate(-2px,-2px)}
+.pb-main{display:flex;gap:16px;align-items:center}
+.ico{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--c);font-size:1.5rem;border:2px solid var(--ink)}
+.pb-main p{color:var(--muted);font-size:.95rem;margin-top:2px;line-height:1.4}
+.pb-format{font-weight:500}
+.pb-price{display:grid;line-height:1.25}
+.pb-price .lbl{display:none;font-size:.85rem;color:var(--muted);font-weight:600}
+.pb-price strong{font:600 1.12rem/1.2 var(--display);letter-spacing:-.03em;white-space:nowrap}
+.pb-price small{font-size:.85rem;color:var(--muted)}
+.pb-span{grid-column:span 2;color:var(--muted);font-size:.95rem}
+.pb-span b{color:var(--ink);font-weight:600}
+.note{margin-top:22px;color:var(--muted);font-size:1rem}
+
+/* преподаватели */
+.teachers-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.teacher{display:grid;grid-template-columns:auto 1fr;gap:26px;padding:30px;border-radius:36px;background:var(--bg);border:2px solid var(--ink)}
+.avatar{display:grid;place-items:center;width:112px;height:112px;border-radius:50%;background:var(--c);border:2px solid var(--ink);font:500 2.8rem/1 var(--display)}
+.teacher h3{font:500 1.5rem/1.15 var(--display);letter-spacing:-.03em;margin-bottom:10px}
+.teacher p{margin-bottom:14px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tags li{padding:5px 12px;border-radius:99px;background:rgba(255,255,255,.7);border:1.5px solid var(--ink);font-size:.9rem;font-weight:500}
+
+/* ───────── конструктор ───────── */
+.enroll{
+  margin:0 clamp(8px,1.8vw,24px) 100px;padding:96px 0;border-radius:clamp(28px,4vw,56px);
+  background:linear-gradient(180deg,var(--tang) 0%,#F6A038 48%,var(--sun) 100%);
+}
+.enroll .sec-head p{color:rgba(13,18,22,.78)}
+.enroll-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.8fr);gap:28px;align-items:start}
+.steps{display:grid;gap:16px;counter-reset:step}
+.step{background:var(--cream);border-radius:30px;padding:28px;border:2px solid var(--ink)}
+.step:not([hidden]){counter-increment:step}
+.step-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.step-head::before{content:counter(step);flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--cream);font:500 .95rem/1 var(--display)}
+.step-head h3{font-size:1.3rem}
+.sub{margin:22px 0 10px;font-weight:600}
+.sub:first-of-type{margin-top:0}
+.hint{margin-top:10px;color:var(--muted);font-size:.95rem}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tiles-3{grid-template-columns:1fr}
+.tile{
+  position:relative;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:20px;
+  background:#fff;border:2px solid var(--line);cursor:pointer;
+  transition:border-color .15s,box-shadow .15s,transform .15s,background-color .15s;
+}
+.tile:hover{border-color:rgba(13,18,22,.5)}
+.tile input{position:absolute;inset:0;margin:0;opacity:0;cursor:pointer}
+.tile .ico{width:44px;height:44px;font-size:1.25rem}
+.tile b{display:block;line-height:1.2}
+.tile small{display:block;margin-top:2px;color:var(--muted);font-size:.875rem;line-height:1.3}
+.tile:has(input:checked){border-color:var(--ink);background:var(--tint,#fff);box-shadow:4px 4px 0 var(--ink);transform:translate(-2px,-2px)}
+.tile:has(input:checked)::after{content:"✓";position:absolute;top:10px;right:12px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--cream);font-size:.8rem;font-weight:700}
+.tile:has(input:focus-visible){outline:3px solid var(--sky);outline-offset:3px}
+.tile:has(input:disabled){opacity:.4;cursor:not-allowed;box-shadow:none;transform:none}
+.tile:has(input:disabled) input{cursor:not-allowed}
+.tile-wide{grid-column:1/-1}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:99px;background:#fff;border:2px solid var(--line);font-weight:500;cursor:pointer;transition:background-color .15s,color .15s,border-color .15s,transform .1s}
+.chip:hover{border-color:rgba(13,18,22,.5)}
+.chip:active{transform:scale(.96)}
+.chip input{position:absolute;inset:0;margin:0;opacity:0;cursor:pointer}
+.chip:has(input:checked){background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.chip:has(input:focus-visible){outline:3px solid var(--sky);outline-offset:3px}
+
+.field{display:grid;gap:6px}
+.field>label,.field>.lab{font-weight:600}
+.input{width:100%;padding:.8em 1em;border-radius:14px;border:2px solid var(--line);background:#fff;transition:border-color .15s,box-shadow .15s}
+.input:hover{border-color:rgba(13,18,22,.5)}
+.input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 4px rgba(53,147,208,.35)}
+.input[aria-invalid="true"]{border-color:#C73E1D}
+textarea.input{min-height:96px;resize:vertical}
+select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' fill='none'%3E%3Cpath d='M1 1.5 7 7.5l6-6' stroke='%230D1216' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") right 1em center no-repeat;padding-right:2.6em}
+.fields-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stack{display:grid;gap:18px}
+.err{min-height:0;color:#B3341A;font-size:.92rem;font-weight:500}
+.err:empty{display:none}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:.95rem;cursor:pointer}
+.consent input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--ink)}
+.trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* билет */
+.summary{position:sticky;top:92px;display:grid;gap:14px}
+.ticket-shadow{filter:drop-shadow(0 14px 18px rgba(13,18,22,.22))}
+.ticket{
+  --n:15px;--stub:176px;display:flex;flex-direction:column;background:var(--cream);border-radius:28px;
+  -webkit-mask:radial-gradient(circle var(--n) at 0 calc(100% - var(--stub)),#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle var(--n) at 100% calc(100% - var(--stub)),#0000 97%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle var(--n) at 0 calc(100% - var(--stub)),#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle var(--n) at 100% calc(100% - var(--stub)),#0000 97%,#000) right/51% 100% no-repeat;
+}
+.ticket-top{padding:24px 24px 18px}
+.ticket-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.ticket-brand{font:500 .9rem/.95 var(--display);letter-spacing:-.04em}
+.ticket-title{font:600 .95rem/1.2 var(--text)}
+.stamp{margin-left:auto;padding:4px 10px;border:2px solid var(--coral);color:#B3401F;border-radius:8px;font:700 .8rem/1.1 var(--text);transform:rotate(5deg);white-space:nowrap}
+.rows{display:grid;gap:11px}
+.rows>div{display:grid;grid-template-columns:116px 1fr;gap:10px;align-items:baseline;border-radius:6px}
+.rows dt{font-size:.85rem;color:var(--muted)}
+.rows dd{font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.rows dd[data-empty="true"]{color:rgba(13,18,22,.32);font-weight:500}
+.ticket-stub{height:var(--stub);padding:20px 24px;border-top:2.5px dashed rgba(13,18,22,.4);display:flex;flex-direction:column;justify-content:center;gap:4px;background:linear-gradient(180deg,rgba(252,195,54,.35),rgba(252,195,54,.12))}
+.stub-label{font-size:.85rem;color:var(--muted);font-weight:600}
+.stub-price{font:600 clamp(1.7rem,2.6vw,2.2rem)/1.1 var(--display);letter-spacing:-.04em}
+.stub-sub{font-size:.88rem;color:var(--muted);line-height:1.35;white-space:pre-line}
+.fine{font-size:.9rem;text-align:center;color:rgba(13,18,22,.78)}
+.flash{animation:flash .9s ease-out}
+@keyframes flash{0%{background:rgba(252,195,54,.95);box-shadow:0 0 0 6px rgba(252,195,54,.95)}100%{background:transparent;box-shadow:0 0 0 6px transparent}}
+
+/* ───────── faq ───────── */
+.faq-list{display:grid;gap:10px;max-width:860px}
+.faq-list details{border-radius:22px;background:#fff;border:2px solid var(--line);transition:border-color .15s}
+.faq-list details[open]{border-color:var(--ink)}
+.faq-list summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;font-weight:600;cursor:pointer;list-style:none}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"+";flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--sun);border:2px solid var(--ink);font:500 1.2rem/1 var(--text);transition:transform .2s}
+.faq-list details[open] summary::after{transform:rotate(45deg)}
+.faq-list details p{padding:0 22px 20px;color:var(--muted);max-width:42em}
+
+/* ───────── подвал ───────── */
+.footer{background:var(--ink);color:var(--cream);padding:64px 0 40px;border-radius:clamp(28px,4vw,56px) clamp(28px,4vw,56px) 0 0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.footer .logo-mark{font-size:1.6rem}
+.footer p{color:rgba(255,251,245,.7);margin-top:16px;max-width:22em}
+.footer h3{font:600 .95rem/1.2 var(--text);color:var(--sun);margin-bottom:14px}
+.footer ul{display:grid;gap:8px}
+.footer a{text-decoration:none;background:linear-gradient(var(--sun),var(--sun)) 0 100%/0 2px no-repeat;transition:background-size .2s}
+.footer a:hover{background-size:100% 2px}
+.footer .logo{background:none}
+.copy{margin-top:48px;padding-top:22px;border-top:1px solid rgba(255,251,245,.18);font-size:.9rem;color:rgba(255,251,245,.6)}
+
+/* ───────── диалог и тост ───────── */
+dialog{width:min(560px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:2px solid var(--ink);border-radius:32px;background:var(--cream);color:var(--ink);box-shadow:8px 8px 0 var(--ink)}
+dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
+.dlg{padding:30px;display:grid;gap:16px}
+.dlg h2{font-size:1.6rem}
+.dlg-msg{max-height:240px;overflow:auto;padding:16px 18px;border-radius:18px;background:#fff;border:2px solid var(--line);font:400 .95rem/1.5 var(--text);white-space:pre-wrap}
+.dlg-actions{display:grid;gap:10px}
+.dlg-close{display:flex;justify-content:flex-end}
+#toast{position:fixed;left:50%;bottom:24px;z-index:50;transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:12px 20px;border-radius:99px;background:var(--ink);color:var(--cream);font-weight:500;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ───────── адаптив ───────── */
+@media (max-width:1020px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-stage{min-height:380px;max-width:560px}
+  .why-list{grid-template-columns:1fr 1fr}
+  .enroll-grid{grid-template-columns:1fr}
+  .summary{position:static;max-width:520px}
+  .teachers-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-grid>:first-child{grid-column:1/-1}
+}
+@media (max-width:860px){
+  .nav{display:none}
+  .bar{justify-content:space-between}
+  .pb-head{display:none}
+  .pb-row{grid-template-columns:1fr 1fr;gap:14px 18px;padding:18px}
+  .pb-main,.pb-format,.pb-row>.btn{grid-column:1/-1}
+  .pb-price .lbl{display:block}
+  .pb-span{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .hero{padding:118px 0 80px}
+  .hero-stage{min-height:340px}
+  .sticker{width:132px}
+  .why{padding-bottom:64px}
+  .why-list{grid-template-columns:1fr}
+  .section{padding-bottom:72px}
+  .enroll{padding:64px 0;margin-bottom:72px}
+  .step{padding:22px 18px}
+  .tiles{grid-template-columns:1fr}
+  .fields-2{grid-template-columns:1fr}
+  .teacher{grid-template-columns:1fr;padding:24px}
+  .avatar{width:88px;height:88px;font-size:2.2rem}
+  .rows>div{grid-template-columns:108px 1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .logo-name{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .bubble{opacity:1}
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header" id="siteHeader">
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="HowToSayDasha, в начало страницы">
+      <span class="logo-mark" aria-hidden="true">HT<br>SD</span>
+      <span class="logo-name" aria-hidden="true">how<br>to say<br>dasha</span>
+    </a>
+    <nav class="nav" aria-label="Разделы сайта">
+      <a href="#prices">Программы и цены</a>
+      <a href="#teachers">Преподаватели</a>
+      <a href="#faq">Вопросы</a>
+    </nav>
+    <a class="btn btn-ink btn-sm" href="#enroll">Записаться</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>Английский<br>легко и весело</h1>
+        <p class="lead">Онлайн-школа HowToSayDasha: занятия для детей и взрослых с сертифицированными преподавателями. Первое пробное занятие бесплатно.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="#enroll">Записаться на пробный урок</a>
+          <a class="btn btn-ghost" href="#prices">Смотреть цены</a>
+        </div>
+      </div>
+
+      <div class="hero-stage" id="stage">
+        <div class="blob"></div>
+        <div class="ring"></div>
+        <div class="half"></div>
+        <div class="bubbles" aria-hidden="true">
+          <div class="bubble bubble-q"><small>How to say</small><strong id="bq">«Привет»?</strong></div>
+          <div class="bubble bubble-a" id="ba">Hello!</div>
+        </div>
+        <a class="sticker" href="#enroll" data-pick="program:club">
+          <small>Супер предложение</small>
+          <b>Speaking<br>Club</b>
+          <span>старт 24.11</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="why wrap" aria-label="Почему выбирают нас">
+    <ul class="why-list">
+      <li style="--c:var(--sun)"><h3>Сертифицированные преподаватели</h3><p>Международные сертификаты и опыт от 8 лет.</p></li>
+      <li style="--c:var(--sky)"><h3>Программа под вас</h3><p>Учитываем уровень и цели с первого урока.</p></li>
+      <li style="--c:var(--mint)"><h3>Удобный график</h3><p>Онлайн из любой точки мира, время выбираете вы.</p></li>
+      <li style="--c:var(--coral)"><h3>Видимый результат</h3><p>При 2–3 занятиях в неделю первые успехи заметны через 1–2 месяца.</p></li>
+    </ul>
+  </section>
+
+  <section class="section" id="prices">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Программы и цены</h2>
+        <p>Цена указана за пакет занятий. У преподавателей она разная — выберите, как вам удобнее.</p>
+      </div>
+      <div class="pb-head" aria-hidden="true"><span>Программа</span><span>Формат</span><span>Дарья</span><span>Эрик</span><span style="width:96px"></span></div>
+      <ul class="pb-list" id="priceList"></ul>
+      <p class="note">Первое пробное занятие бесплатное. Перед стартом бесплатно проверим уровень.</p>
+    </div>
+  </section>
+
+  <section class="section" id="teachers">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Преподаватели</h2>
+        <p>Два преподавателя с разным опытом. Если не уверены, кого выбрать, подскажем по вашей цели и возрасту.</p>
+      </div>
+      <div class="teachers-grid">
+        <article class="teacher" style="--bg:#FBE3F4;--c:var(--pink)">
+          <div class="avatar" aria-hidden="true">Д</div>
+          <div>
+            <h3>Дарья Солдатова</h3>
+            <p>Сертифицированный преподаватель с 8-летним опытом. Работает по коммуникативной методике, специализируется на бизнес-английском. Практикующий переводчик: работала с Xiaomi, OZON и FLYFILM.</p>
+            <ul class="tags"><li>Бизнес-английский</li><li>Дети с 4 лет</li><li>Разговорная практика</li></ul>
+            <a class="btn btn-ink btn-sm" href="#enroll" data-pick="teacher:daria">Заниматься с Дарьей</a>
+          </div>
+        </article>
+        <article class="teacher" style="--bg:#D9ECF8;--c:var(--sky)">
+          <div class="avatar" aria-hidden="true">Э</div>
+          <div>
+            <h3>Эрик Фури</h3>
+            <p>Носитель языка из ЮАР, 10 лет преподавательского опыта. Эксперт по подготовке к международным экзаменам. TEFL-сертификат Language Centre Стелленбосского университета.</p>
+            <ul class="tags"><li>Носитель языка</li><li>Международные экзамены</li><li>Дети с 7 лет</li></ul>
+            <a class="btn btn-ink btn-sm" href="#enroll" data-pick="teacher:eric">Заниматься с Эриком</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ конструктор + форма ═════════ -->
+  <section class="enroll" id="enroll">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Соберите свой урок</h2>
+        <p>Ответьте на несколько вопросов — преподаватель сразу поймёт, что вам нужно. Справа видно, что получается, и сколько это стоит.</p>
+      </div>
+
+      <div class="enroll-grid">
+        <form class="steps" id="enrollForm" novalidate autocomplete="on">
+
+          <!-- 1 -->
+          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+            <legend class="sr-only">Программа</legend>
+            <div class="step-head"><h3>Что хотите изучать?</h3></div>
+            <div class="tiles" id="programTiles"></div>
+            <p class="err" data-err="program" role="alert"></p>
+
+            <div class="field" id="ageField" hidden style="margin-top:18px">
+              <label for="age">Сколько лет ребёнку?</label>
+              <select class="input" id="age" name="age" style="max-width:220px">
+                <option value="">Выберите возраст</option>
+              </select>
+              <p class="err" data-err="age" role="alert"></p>
+            </div>
+
+            <div id="sizeField" hidden style="margin-top:22px">
+              <p class="sub">Размер группы</p>
+              <div class="chips" id="sizeChips"></div>
+              <p class="hint">Чем меньше группа, тем больше внимания каждому. Занятия по 80 минут.</p>
+            </div>
+          </fieldset>
+
+          <!-- 2 -->
+          <fieldset class="step" id="teacherStep" style="border:2px solid var(--ink);margin:0;min-width:0">
+            <legend class="sr-only">Преподаватель</legend>
+            <div class="step-head"><h3>С кем будете заниматься?</h3></div>
+            <div class="tiles tiles-3" id="teacherTiles"></div>
+            <p class="hint" id="teacherHint" hidden></p>
+          </fieldset>
+
+          <!-- 3 -->
+          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+            <legend class="sr-only">Уровень и цели</legend>
+            <div class="step-head"><h3>Расскажите об уровне и целях</h3></div>
+            <p class="sub">Уровень английского</p>
+            <div class="chips" id="levelChips"></div>
+            <p class="hint">Не уверены — не страшно. Перед стартом бесплатно проверим уровень.</p>
+            <p class="sub">Зачем нужен английский? <span style="font-weight:400;color:var(--muted)">Можно выбрать несколько</span></p>
+            <div class="chips" id="goalChips"></div>
+          </fieldset>
+
+          <!-- 4 -->
+          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+            <legend class="sr-only">Расписание</legend>
+            <div class="step-head"><h3>Когда удобно заниматься?</h3></div>
+            <p class="sub">Дни недели</p>
+            <div class="chips" id="dayChips"></div>
+            <p class="sub">Время суток</p>
+            <div class="chips" id="timeChips"></div>
+            <div class="field" style="margin-top:20px;max-width:380px">
+              <label for="tz">Город или часовой пояс <span style="font-weight:400;color:var(--muted)">— по желанию</span></label>
+              <input class="input" id="tz" name="tz" type="text" placeholder="Например, Москва или Бали (UTC+8)" autocomplete="off">
+            </div>
+          </fieldset>
+
+          <!-- 5 -->
+          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+            <legend class="sr-only">Контакты</legend>
+            <div class="step-head"><h3>Как с вами связаться?</h3></div>
+            <div class="stack">
+              <div class="field">
+                <label for="name">Ваше имя</label>
+                <input class="input" id="name" name="name" type="text" placeholder="Как к вам обращаться" autocomplete="given-name">
+                <p class="err" data-err="name" role="alert"></p>
+              </div>
+
+              <div class="field">
+                <span class="lab" id="ctypeLabel">Удобный способ связи</span>
+                <div class="chips" id="ctypeChips" role="radiogroup" aria-labelledby="ctypeLabel"></div>
+                <input class="input" id="contact" name="contact" type="text" placeholder="@username" autocomplete="off" aria-label="Контакт для связи" style="margin-top:6px">
+                <p class="err" data-err="contact" role="alert"></p>
+              </div>
+
+              <div class="field">
+                <label for="note">Что ещё важно знать преподавателю? <span style="font-weight:400;color:var(--muted)">— по желанию</span></label>
+                <textarea class="input" id="note" name="note" placeholder="Например: готовимся к IELTS, ребёнок стесняется говорить, нужен английский для переговоров"></textarea>
+              </div>
+
+              <div>
+                <label class="consent">
+                  <input type="checkbox" name="consent" id="consent">
+                  <span>Согласен(на) на обработку персональных данных, чтобы со мной связались по заявке</span>
+                </label>
+                <p class="err" data-err="consent" role="alert"></p>
+              </div>
+
+              <div class="trap" aria-hidden="true"><label>Не заполняйте это поле<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+            </div>
+          </fieldset>
+        </form>
+
+        <!-- билет -->
+        <aside class="summary" aria-label="Ваша заявка">
+          <div class="ticket-shadow">
+            <div class="ticket">
+              <div class="ticket-top">
+                <div class="ticket-head">
+                  <span class="ticket-brand" aria-hidden="true">HT<br>SD</span>
+                  <span class="ticket-title">Билет на пробный урок</span>
+                  <span class="stamp">бесплатно</span>
+                </div>
+                <dl class="rows">
+                  <div><dt>Программа</dt><dd data-out="program" data-empty="true">—</dd></div>
+                  <div><dt>Преподаватель</dt><dd data-out="teacher" data-empty="true">—</dd></div>
+                  <div><dt data-out="detailLabel">Детали</dt><dd data-out="detail" data-empty="true">—</dd></div>
+                  <div><dt>Уровень</dt><dd data-out="level" data-empty="true">—</dd></div>
+                  <div><dt>Цели</dt><dd data-out="goals" data-empty="true">—</dd></div>
+                  <div><dt>Когда удобно</dt><dd data-out="when" data-empty="true">—</dd></div>
+                </dl>
+              </div>
+              <div class="ticket-stub" aria-live="polite">
+                <span class="stub-label">Стоимость пакета</span>
+                <strong class="stub-price" data-out="price">—</strong>
+                <span class="stub-sub" data-out="priceSub">Выберите программу, и мы покажем цену</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-ink btn-block" type="submit" form="enrollForm">Записаться на пробный урок</button>
+          <p class="fine">Первое пробное занятие бесплатное.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="sec-head"><h2>Частые вопросы</h2></div>
+      <div class="faq-list">
+        <details><summary>Какой уровень нужен, чтобы начать?</summary><p>Любой: от нуля до продвинутого. Перед началом занятий бесплатно проверим уровень.</p></details>
+        <details><summary>Сколько длится один урок?</summary><p>Для малышей 40 минут, чтобы удержать внимание. Для школьников и взрослых 45–60 минут. Групповые занятия длятся 80 минут.</p></details>
+        <details><summary>Когда будут первые результаты?</summary><p>При регулярных занятиях 2–3 раза в неделю первые результаты заметны через 1–2 месяца. До среднего уровня обычно нужно 6–12 месяцев.</p></details>
+        <details><summary>Можно ли перенести занятие?</summary><p>Да, предупредите преподавателя минимум за 12 часов, и мы найдём другое время. Занятия, пропущенные без предупреждения, не компенсируются.</p></details>
+        <details><summary>Как оплачивать занятия?</summary><p>Помесячно или пакетами занятий: картой, переводом на карту или через платёжные системы. Первое пробное занятие бесплатно.</p></details>
+        <details><summary>Нужно ли покупать учебники?</summary><p>Нет, все материалы мы даём в электронном виде бесплатно. Если захотите, посоветуем дополнительные учебники для самостоятельной работы.</p></details>
+        <details><summary>Можно ли заниматься в группе с друзьями?</summary><p>Да. Мы формируем группы по уровням, и вы можете привести друзей. Есть семейные пакеты со скидкой.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="logo" href="#top" aria-label="HowToSayDasha, в начало страницы">
+          <span class="logo-mark" aria-hidden="true">HT<br>SD</span>
+          <span class="logo-name" aria-hidden="true">how<br>to say<br>dasha</span>
+        </a>
+        <p>Онлайн-школа английского языка для всех возрастов.</p>
+      </div>
+      <div>
+        <h3>Контакты</h3>
+        <ul>
+          <li><a href="mailto:HowToSayDasha@mail.ru">HowToSayDasha@mail.ru</a></li>
+          <li><a href="tel:+79822734618">+7 982 273-46-18</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Мы в соцсетях</h3>
+        <ul>
+          <li><a href="https://t.me/howtosaydasha" target="_blank" rel="noopener">Telegram</a></li>
+          <li><a href="https://vk.com/howtosaydasha" target="_blank" rel="noopener">ВКонтакте</a></li>
+          <li><a href="https://www.instagram.com/howtosaydasha/" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="copy">© HowToSayDasha. Все права защищены.</p>
+  </div>
+</footer>
+
+<dialog id="done" aria-labelledby="doneTitle">
+  <div class="dlg">
+    <h2 id="doneTitle">Осталось отправить заявку</h2>
+    <p id="doneText">Мы собрали всё, что вы выбрали. Отправьте заявку любым удобным способом, и преподаватель увидит каждую деталь.</p>
+    <div class="dlg-msg" id="doneMsg" tabindex="0"></div>
+    <div class="dlg-actions" id="doneActions">
+      <button class="btn btn-ink" type="button" id="sendTg">Скопировать и открыть Telegram</button>
+      <a class="btn btn-ghost" id="sendMail" href="#">Написать на почту</a>
+      <button class="btn btn-ghost" type="button" id="sendCopy">Скопировать текст заявки</button>
+    </div>
+    <form method="dialog" class="dlg-close"><button class="btn btn-sm btn-ghost">Закрыть</button></form>
+  </div>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<noscript><p style="padding:24px;text-align:center">Для работы конструктора включите JavaScript. Или напишите нам: HowToSayDasha@mail.ru, +7 982 273-46-18.</p></noscript>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ── Настройки ──────────────────────────────────────────────
+     FORM_ENDPOINT — адрес, куда отправлять заявки (например, Formspree:
+     'https://formspree.io/f/xxxxxxx'). Пока пусто — после нажатия на кнопку
+     заявка собирается в текст, который можно отправить в Telegram или на почту. */
+  const FORM_ENDPOINT = '';
+  const CONTACT_EMAIL = 'HowToSayDasha@mail.ru';
+  const TELEGRAM_URL  = 'https://t.me/howtosaydasha';
+
+  /* ── Данные: преподаватели, программы, цены (по их прайсу) ── */
+  const TEACHERS = {
+    daria: { name: 'Дарья Солдатова', short: 'Дарья', kidsFrom: 4, ico: 'Д', c: 'var(--pink)',  hint: '8 лет опыта, бизнес-английский' },
+    eric:  { name: 'Эрик Фури',       short: 'Эрик',  kidsFrom: 7, ico: 'Э', c: 'var(--sky)',   hint: 'Носитель из ЮАР, экзамены' },
+  };
+  const PROGRAMS = {
+    kids:       { title: 'Детские занятия',      ico: '🧸', c: 'var(--sun)',   tint: '#FFF1C7', lessons: 10, min: 40,
+                  desc: 'Песни, игры и творчество. Помогаем с домашкой и работаем по запросу родителей.',
+                  price: { daria: 15000, eric: 25000 } },
+    individual: { title: 'Индивидуальные',       ico: '🎯', c: 'var(--sky)',   tint: '#D9ECF8', lessons: 10, min: 45,
+                  desc: 'Персональная программа под ваши цели и уровень, расписание — как удобно вам.',
+                  price: { daria: 35000, eric: 50000 } },
+    group:      { title: 'Групповые занятия',    ico: '👥', c: 'var(--mint)',  tint: '#D4F1E8', lessons: 20, min: 80,
+                  desc: 'Группы по уровням. В подарок — уроки разговорного клуба с носителем.',
+                  sizes: { '4–6': { daria: 40000, eric: 55000 }, '6–8': { daria: 35000, eric: 50000 }, '8–10': { daria: 30000, eric: 45000 } } },
+    business:   { title: 'Бизнес-английский',    ico: '💼', c: 'var(--coral)', tint: '#FADDD3', lessons: 10, min: 60,
+                  desc: 'Деловая лексика, презентации и переговоры для работы в международной среде.',
+                  price: { daria: 45000, eric: 60000 } },
+    club:       { title: 'SpeakingClub',         ico: '🎤', c: 'var(--tang)',  tint: '#FDE2C6',
+                  desc: 'Разговорная практика онлайн. Старт 24.11.', fmt: 'Старт 24.11' },
+  };
+  const LEVELS = { unknown: 'Не знаю, проверьте', start: 'С нуля', basic: 'Базовый (A1–A2)', mid: 'Средний (B1–B2)', adv: 'Продвинутый (C1+)' };
+  const GOALS  = ['✈️ Путешествия', '💼 Работа и карьера', '🎓 Экзамены', '🏫 Школа', '💬 Разговорный барьер', '🌍 Переезд', '🎬 Для души'];
+  const DAYS   = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  const TIMES  = ['Утро, до 12', 'День, 12–17', 'Вечер, после 17'];
+  const CTYPES = {
+    tg:    { label: 'Telegram', ph: '@username',            type: 'text',  name: 'Telegram' },
+    wa:    { label: 'WhatsApp', ph: '+7 900 000-00-00',     type: 'tel',   name: 'WhatsApp' },
+    phone: { label: 'Звонок',   ph: '+7 900 000-00-00',     type: 'tel',   name: 'Телефон' },
+    email: { label: 'Почта',    ph: 'name@mail.ru',         type: 'email', name: 'Почта' },
+  };
+
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const rub = n => n.toLocaleString('ru-RU') + ' ₽';
+  const fmtOf = p => p.lessons ? `${p.lessons} уроков по ${p.min} минут` : p.fmt;
+
+  const priceFor = (pid, tid, size) => {
+    const p = PROGRAMS[pid];
+    if (!p) return null;
+    const v = p.sizes ? (p.sizes[size] || {})[tid] : (p.price || {})[tid];
+    return v ?? null;
+  };
+  const teachersFor = (pid, age) =>
+    Object.keys(TEACHERS).filter(t => !(pid === 'kids' && age && age < TEACHERS[t].kidsFrom));
+
+  /* ── Прайс-лист ── */
+  function renderPriceList() {
+    const cell = (pid, tid) => {
+      const p = PROGRAMS[pid];
+      let v, from = '';
+      if (p.sizes) { v = Math.min(...Object.values(p.sizes).map(s => s[tid])); from = 'от '; }
+      else v = p.price[tid];
+      return `<div class="pb-price"><span class="lbl">${TEACHERS[tid].short}</span><strong>${from}${rub(v)}</strong><small>${from}${rub(Math.round(v / p.lessons))} за урок</small></div>`;
+    };
+    $('#priceList').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) => `
+      <li class="pb-row" style="--c:${p.c}">
+        <div class="pb-main"><span class="ico" aria-hidden="true">${p.ico}</span><div><h3>${p.title}</h3><p>${p.desc}</p></div></div>
+        <div class="pb-format">${fmtOf(p)}</div>
+        ${p.lessons ? cell(pid, 'daria') + cell(pid, 'eric') : '<div class="pb-price pb-span"><b>Стоимость назовём при записи.</b> Это разговорный клуб, который стартует 24.11.</div>'}
+        <a class="btn btn-ink btn-sm" href="#enroll" data-pick="program:${pid}" aria-label="Выбрать: ${p.title}">Выбрать</a>
+      </li>`).join('');
+  }
+
+  /* ── Поля конструктора ── */
+  const form = $('#enrollForm');
+
+  const tile = (name, value, ico, c, tint, title, hint, wide) => `
+    <label class="tile${wide ? ' tile-wide' : ''}" style="--tint:${tint}">
+      <input type="radio" name="${name}" value="${value}">
+      <span class="ico" style="--c:${c}" aria-hidden="true">${ico}</span>
+      <span><b>${title}</b><small>${hint}</small></span>
+    </label>`;
+  const chip = (type, name, value, text, checked) =>
+    `<label class="chip"><input type="${type}" name="${name}" value="${value}"${checked ? ' checked' : ''}><span>${text}</span></label>`;
+
+  function renderFields() {
+    $('#programTiles').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) =>
+      tile('program', pid, p.ico, p.c, p.tint, p.title, fmtOf(p), pid === 'club')).join('');
+    $('#teacherTiles').innerHTML =
+      Object.entries(TEACHERS).map(([tid, t]) => tile('teacher', tid, t.ico, t.c, '#fff', t.name, t.hint)).join('') +
+      tile('teacher', 'any', '✨', 'var(--sun)', '#fff', 'Помогите выбрать', 'Подскажем по вашей цели и возрасту');
+    $('input[name="teacher"][value="any"]').checked = true;
+
+    $('#age').insertAdjacentHTML('beforeend', Array.from({ length: 15 }, (_, i) => `<option value="${i + 4}">${i + 4} ${i + 4 < 5 ? 'года' : 'лет'}</option>`).join(''));
+    $('#sizeChips').innerHTML = Object.keys(PROGRAMS.group.sizes).map(s => chip('radio', 'size', s, `${s} человек`, s === '6–8')).join('');
+    $('#levelChips').innerHTML = Object.entries(LEVELS).map(([k, v]) => chip('radio', 'level', k, v)).join('');
+    $('#goalChips').innerHTML = GOALS.map(g => chip('checkbox', 'goal', g, g)).join('');
+    $('#dayChips').innerHTML = DAYS.map(d => chip('checkbox', 'day', d, d)).join('');
+    $('#timeChips').innerHTML = TIMES.map(t => chip('checkbox', 'time', t, t)).join('');
+    $('#ctypeChips').innerHTML = Object.entries(CTYPES).map(([k, c], i) => chip('radio', 'ctype', k, c.label, i === 0)).join('');
+  }
+
+  const read = () => {
+    const fd = new FormData(form);
+    const g = k => (fd.get(k) || '').toString().trim();
+    return {
+      program: g('program'), teacher: g('teacher') || 'any', size: g('size') || '6–8', age: Number(g('age')) || 0,
+      level: g('level'), goals: fd.getAll('goal'), days: fd.getAll('day'), times: fd.getAll('time'), tz: g('tz'),
+      name: g('name'), ctype: g('ctype') || 'tg', contact: g('contact'), note: g('note'), consent: fd.get('consent') === 'on',
+    };
+  };
+
+  /* ── Билет: сводка и цена ── */
+  const out = k => $(`[data-out="${k}"]`);
+  function put(k, text) {
+    const el = out(k), empty = !text || text === '—';
+    const val = empty ? '—' : text;
+    if (el.textContent !== val) {
+      el.textContent = val;
+      el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+    }
+    if (el.tagName === 'DD') el.dataset.empty = String(empty);
+  }
+
+  function quote(s) {
+    if (!s.program) return { big: '—', sub: 'Выберите программу, и мы покажем цену' };
+    const p = PROGRAMS[s.program];
+    if (!p.lessons) return { big: 'Назовём при записи', sub: 'SpeakingClub стартует 24.11' };
+    const avail = teachersFor(s.program, s.age);
+    const pool = s.teacher === 'any' ? avail : avail.filter(t => t === s.teacher);
+    const prices = pool.map(t => ({ t, v: priceFor(s.program, t, s.size) })).filter(x => x.v != null);
+    if (!prices.length) return { big: '—', sub: '' };
+    const base = `${p.lessons} уроков по ${p.min} минут`;
+    if (prices.length === 1) {
+      const v = prices[0].v;
+      return { big: rub(v), sub: `${base}\n${rub(Math.round(v / p.lessons))} за урок` };
+    }
+    return { big: 'от ' + rub(Math.min(...prices.map(x => x.v))), sub: prices.map(x => `${TEACHERS[x.t].short} — ${rub(x.v)}`).join(', ') + '\n' + base };
+  }
+
+  function sync() {
+    let s = read();
+    const kids = s.program === 'kids', group = s.program === 'group', club = s.program === 'club';
+
+    $('#ageField').hidden = !kids;
+    $('#sizeField').hidden = !group;
+    $('#teacherStep').hidden = club;
+
+    // Эрик берёт детей с 7 лет
+    const ericBlocked = kids && s.age > 0 && s.age < TEACHERS.eric.kidsFrom;
+    const ericInput = $('input[name="teacher"][value="eric"]');
+    ericInput.disabled = ericBlocked;
+    if (ericBlocked && s.teacher === 'eric') { $('input[name="teacher"][value="any"]').checked = true; s = read(); }
+    const hint = $('#teacherHint');
+    hint.hidden = !ericBlocked;
+    hint.textContent = ericBlocked ? 'Эрик занимается с детьми от 7 лет, поэтому для этого возраста доступна Дарья.' : '';
+
+    // сводка
+    put('program', s.program ? PROGRAMS[s.program].title : '');
+    put('teacher', club ? 'Назначим на старте' : s.teacher === 'any' ? 'Подберём вместе' : TEACHERS[s.teacher].name);
+    out('detailLabel').textContent = kids ? 'Возраст' : group ? 'Группа' : 'Формат';
+    put('detail', kids ? (s.age ? `${s.age} ${s.age < 5 ? 'года' : 'лет'}` : '') : group ? `${s.size} человек` : s.program ? fmtOf(PROGRAMS[s.program]) : '');
+    put('level', LEVELS[s.level] || '');
+    put('goals', s.goals.map(g => g.replace(/^\S+\s/, '')).join(', '));
+    const when = [s.days.length ? s.days.join(', ') : '', s.times.map(t => t.split(',')[0].toLowerCase()).join(', ')].filter(Boolean).join(' · ');
+    put('when', when);
+
+    const q = quote(s);
+    put('price', q.big);
+    out('priceSub').textContent = q.sub;
+  }
+
+  /* ── Выбор из прайса / карточек преподавателей / стикера ── */
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-pick]');
+    if (!a) return;
+    const [name, value] = a.dataset.pick.split(':');
+    const input = $(`input[name="${name}"][value="${value}"]`, form);
+    if (input && !input.disabled) { input.checked = true; sync(); }
+  });
+
+  /* ── Контакт: подсказка и тип поля ── */
+  function syncContact() {
+    const c = CTYPES[read().ctype], inp = $('#contact');
+    inp.placeholder = c.ph; inp.type = c.type;
+    inp.autocomplete = c.type === 'email' ? 'email' : c.type === 'tel' ? 'tel' : 'off';
+  }
+
+  /* ── Проверка и отправка ── */
+  const errEl = k => $(`[data-err="${k}"]`);
+  function clearErrors() {
+    $$('.err').forEach(e => (e.textContent = ''));
+    $$('[aria-invalid]').forEach(e => e.removeAttribute('aria-invalid'));
+  }
+  function validate(s) {
+    const bad = [];
+    const need = (ok, key, msg, focus) => { if (!ok) { errEl(key).textContent = msg; if (focus) focus.setAttribute('aria-invalid', 'true'); bad.push(focus || errEl(key)); } };
+    need(!!s.program, 'program', 'Выберите программу, чтобы мы знали, чему учить', $('input[name="program"]'));
+    need(s.program !== 'kids' || s.age > 0, 'age', 'Укажите возраст ребёнка', $('#age'));
+    need(s.name.length >= 2, 'name', 'Напишите, как к вам обращаться', $('#name'));
+    const digits = s.contact.replace(/\D/g, '');
+    const okContact = s.ctype === 'email' ? /^\S+@\S+\.\S+$/.test(s.contact)
+                    : s.ctype === 'tg'    ? s.contact.replace(/^@/, '').length >= 4
+                    : digits.length >= 10;
+    const msgs = { tg: 'Укажите ваш Telegram, например @username', wa: 'Укажите номер WhatsApp, например +7 900 000-00-00', phone: 'Укажите номер телефона, например +7 900 000-00-00', email: 'Укажите почту, например name@mail.ru' };
+    need(okContact, 'contact', msgs[s.ctype], $('#contact'));
+    need(s.consent, 'consent', 'Поставьте галочку, чтобы мы могли связаться с вами', $('#consent'));
+    return bad;
+  }
+
+  function buildMessage(s) {
+    const p = PROGRAMS[s.program], q = quote(s);
+    const L = [];
+    L.push('Заявка на пробный урок — HowToSayDasha', '');
+    L.push(`Имя: ${s.name}`);
+    L.push(`Связь: ${CTYPES[s.ctype].name}, ${s.contact}`, '');
+    L.push(`Программа: ${p.title}${p.lessons ? ` (${fmtOf(p)})` : ' (старт 24.11)'}`);
+    if (s.program !== 'club') L.push(`Преподаватель: ${s.teacher === 'any' ? 'нужна помощь с выбором' : TEACHERS[s.teacher].name}`);
+    if (s.program === 'kids') L.push(`Возраст ребёнка: ${s.age}`);
+    if (s.program === 'group') L.push(`Размер группы: ${s.size} человек`);
+    L.push(`Уровень: ${LEVELS[s.level] || 'не указан'}`);
+    if (s.goals.length) L.push(`Цели: ${s.goals.map(g => g.replace(/^\S+\s/, '')).join(', ')}`);
+    if (s.days.length) L.push(`Дни: ${s.days.join(', ')}`);
+    if (s.times.length) L.push(`Время: ${s.times.join('; ')}`);
+    if (s.tz) L.push(`Город / часовой пояс: ${s.tz}`);
+    if (p.lessons) L.push(`Стоимость: ${q.big}${q.big.startsWith('от') ? '' : ' за пакет'}`);
+    if (s.note) L.push('', `Комментарий: ${s.note}`);
+    return L.join('\n');
+  }
+
+  async function copyText(t) {
+    try { await navigator.clipboard.writeText(t); return true; }
+    catch {
+      const ta = document.createElement('textarea');
+      ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch {}
+      ta.remove(); return ok;
+    }
+  }
+  let toastTimer;
+  function toast(text) {
+    const t = $('#toast'); t.textContent = text; t.classList.add('on');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 3200);
+  }
+
+  const dlg = $('#done');
+  function openDone(sent, msg) {
+    $('#doneTitle').textContent = sent ? 'Заявка отправлена' : 'Осталось отправить заявку';
+    $('#doneText').textContent = sent
+      ? 'Мы свяжемся с вами в ближайшее время. Вот что вы нам прислали:'
+      : 'Мы собрали всё, что вы выбрали. Отправьте заявку любым удобным способом, и преподаватель увидит каждую деталь.';
+    $('#doneMsg').textContent = msg;
+    $('#doneActions').hidden = sent;
+    $('#sendMail').href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Заявка на пробный урок')}&body=${encodeURIComponent(msg)}`;
+    dlg.showModal();
+  }
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  $('#sendCopy').addEventListener('click', async () => toast(await copyText($('#doneMsg').textContent) ? 'Текст заявки скопирован' : 'Не получилось скопировать, выделите текст вручную'));
+  $('#sendTg').addEventListener('click', async () => {
+    const ok = await copyText($('#doneMsg').textContent);
+    toast(ok ? 'Текст заявки скопирован. Вставьте его в чат Telegram' : 'Откройте Telegram и отправьте текст заявки');
+    window.open(TELEGRAM_URL, '_blank', 'noopener');
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    clearErrors();
+    const s = read();
+    if (new FormData(form).get('website')) return;            // ловушка для ботов
+    const bad = validate(s);
+    if (bad.length) { bad[0].scrollIntoView({ block: 'center', behavior: 'smooth' }); if (bad[0].focus) bad[0].focus({ preventScroll: true }); return; }
+
+    const msg = buildMessage(s);
+    if (!FORM_ENDPOINT) return openDone(false, msg);
+    try {
+      const r = await fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ ...s, message: msg }) });
+      if (!r.ok) throw new Error(r.status);
+      openDone(true, msg);
+    } catch { openDone(false, msg); }
+  });
+
+  form.addEventListener('input', e => {
+    if (e.target.name === 'ctype') syncContact();
+    sync();
+  });
+  form.addEventListener('change', sync);
+
+  /* ── Шапка при прокрутке ── */
+  const header = $('#siteHeader');
+  const onScroll = () => header.classList.toggle('is-stuck', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* ── Hero: «How to say …?» → ответ ── */
+  const PAIRS = [['Привет', 'Hello!'], ['Спасибо', 'Thank you!'], ['Давайте начнём', 'Let’s start!'], ['Как дела?', 'How are you?'], ['До встречи', 'See you soon!']];
+  const stage = $('#stage');
+  let pi = 0;
+  const play = () => {
+    $('#bq').textContent = `«${PAIRS[pi][0]}»?`;
+    $('#ba').textContent = PAIRS[pi][1];
+    stage.classList.remove('is-playing'); void stage.offsetWidth; stage.classList.add('is-playing');
+    pi = (pi + 1) % PAIRS.length;
+  };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { $('.bubble-q').style.opacity = $('.bubble-a').style.opacity = 1; }
+  else { play(); setInterval(play, 4400); }
+
+  /* ── Старт ── */
+  renderPriceList();
+  renderFields();
+  syncContact();
+  sync();
+})();
+</script>
+</body>
+</html>
