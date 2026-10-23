@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F9D3EE">
 <title>HowToSayDasha — запись на занятия по английскому</title>
-<meta name="description" content="Онлайн-школа английского для детей и взрослых. Соберите свой урок, посмотрите цены и запишитесь на бесплатное пробное занятие.">
+<meta name="description" content="Онлайн-школа английского для детей и взрослых. Пройдите тест уровня, соберите свой урок и запишитесь на бесплатное пробное занятие.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23FCC336'/%3E%3Ctext x='32' y='28' font-family='Arial' font-weight='700' font-size='22' text-anchor='middle' fill='%230D1216'%3EHT%3C/text%3E%3Ctext x='32' y='50' font-family='Arial' font-weight='700' font-size='22' text-anchor='middle' fill='%230D1216'%3ESD%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,11 +31,12 @@
 
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth;scroll-padding-top:88px;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;scroll-padding-top:88px;scrollbar-gutter:stable;-webkit-text-size-adjust:100%}
+html:has(dialog[open]){overflow:hidden}
 body{margin:0;background:var(--cream);color:var(--ink);font:400 1.0625rem/1.55 var(--text);-webkit-font-smoothing:antialiased}
 img,svg{display:block;max-width:100%}
-h1,h2,h3,p,ul,dl,dd,figure{margin:0}
-ul{padding:0;list-style:none}
+h1,h2,h3,p,ul,ol,dl,dd,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
 button,input,select,textarea{font:inherit;color:inherit}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--sky);outline-offset:3px;border-radius:6px}
@@ -56,11 +57,14 @@ h3{font:700 1.1rem/1.25 var(--text)}
 }
 .btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--sun)}
 .btn:active{transform:translate(0,0);box-shadow:none}
+.btn:disabled{opacity:.55;cursor:wait;transform:none;box-shadow:none}
 .btn-ink{background:var(--ink);color:var(--cream)}
 .btn-ghost{background:transparent;color:var(--ink)}
 .btn-ghost:hover{background:var(--cream);box-shadow:4px 4px 0 var(--ink)}
 .btn-sm{padding:.7em 1.15em;font-size:.95rem}
 .btn-block{width:100%}
+.link{background:none;border:0;padding:0;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.link:hover{text-decoration-thickness:2px}
 
 /* ───────── шапка ───────── */
 .site-header{position:fixed;inset:0 0 auto 0;z-index:20;transition:background-color .2s,box-shadow .2s,backdrop-filter .2s}
@@ -129,7 +133,7 @@ h3{font:700 1.1rem/1.25 var(--text)}
 .sec-head p{max-width:40em;color:var(--muted);font-size:1.1rem}
 
 /* прайс */
-.pb-head,.pb-row{display:grid;grid-template-columns:minmax(0,2.5fr) minmax(0,1.3fr) minmax(0,1.15fr) minmax(0,1.15fr) auto;gap:20px;align-items:center}
+.pb-head,.pb-row{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,1.3fr) minmax(0,1.6fr) auto;gap:24px;align-items:center}
 .pb-head{padding:0 22px 12px;font-weight:600;font-size:.95rem;color:var(--muted)}
 .pb-list{display:grid;gap:12px}
 .pb-row{padding:18px 22px;border-radius:26px;background:#fff;border:2px solid var(--line);transition:border-color .16s,box-shadow .16s,transform .16s}
@@ -138,22 +142,47 @@ h3{font:700 1.1rem/1.25 var(--text)}
 .ico{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--c);font-size:1.5rem;border:2px solid var(--ink)}
 .pb-main p{color:var(--muted);font-size:.95rem;margin-top:2px;line-height:1.4}
 .pb-format{font-weight:500}
-.pb-price{display:grid;line-height:1.25}
-.pb-price .lbl{display:none;font-size:.85rem;color:var(--muted);font-weight:600}
-.pb-price strong{font:600 1.12rem/1.2 var(--display);letter-spacing:-.03em;white-space:nowrap}
+.pb-price{display:grid;justify-items:start;line-height:1.25}
+.pb-price strong{font:600 1.2rem/1.2 var(--display);letter-spacing:-.03em;white-space:nowrap}
+.pb-price strong.soft{font:600 1.05rem/1.25 var(--text);letter-spacing:0;white-space:normal}
 .pb-price small{font-size:.85rem;color:var(--muted)}
-.pb-span{grid-column:span 2;color:var(--muted);font-size:.95rem}
-.pb-span b{color:var(--ink);font-weight:600}
+.deal{margin-top:8px;padding:5px 12px;border-radius:14px;background:var(--sun);border:2px solid var(--ink);font-size:.85rem;font-weight:600;line-height:1.3}
 .note{margin-top:22px;color:var(--muted);font-size:1rem}
 
-/* преподаватели */
-.teachers-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.teacher{display:grid;grid-template-columns:auto 1fr;gap:26px;padding:30px;border-radius:36px;background:var(--bg);border:2px solid var(--ink)}
-.avatar{display:grid;place-items:center;width:112px;height:112px;border-radius:50%;background:var(--c);border:2px solid var(--ink);font:500 2.8rem/1 var(--display)}
-.teacher h3{font:500 1.5rem/1.15 var(--display);letter-spacing:-.03em;margin-bottom:10px}
-.teacher p{margin-bottom:14px}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+/* преподаватель */
+.teacher{display:grid;grid-template-columns:auto minmax(0,1fr);gap:44px;align-items:center;padding:44px;border-radius:44px;background:#FBE3F4;border:2px solid var(--ink)}
+.avatar{display:grid;place-items:center;width:210px;height:210px;border-radius:50%;background:var(--sun);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--ink);font:500 5.4rem/1 var(--display)}
+.teacher h3{font:500 1.9rem/1.1 var(--display);letter-spacing:-.03em;margin-bottom:14px}
+.teacher-body>p{max-width:38em}
+.facts{display:grid;gap:8px;margin:18px 0}
+.facts li{position:relative;padding-left:26px}
+.facts li::before{content:"";position:absolute;left:0;top:.5em;width:11px;height:11px;border-radius:50%;background:var(--c);border:2px solid var(--ink)}
+.teacher blockquote{margin:0 0 24px;padding-left:18px;border-left:4px solid var(--coral);font-weight:500;font-size:1.1rem;max-width:34em}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
 .tags li{padding:5px 12px;border-radius:99px;background:rgba(255,255,255,.7);border:1.5px solid var(--ink);font-size:.9rem;font-weight:500}
+
+/* отзывы */
+.rev-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.rev{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:22px;padding:30px 30px 26px;border-radius:32px;background:var(--bg);border:2px solid var(--ink)}
+.rev::before{content:"«";display:block;margin-bottom:-6px;font:500 3.4rem/.8 var(--display);color:var(--ink)}
+.rev blockquote p{font-size:1.1rem;line-height:1.55}
+.rev figcaption{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.rev figcaption b{font-weight:700}
+.rev figcaption span{padding:4px 12px;border-radius:99px;background:rgba(255,255,255,.75);border:1.5px solid var(--ink);font-size:.88rem;font-weight:500}
+.rev-1{grid-column:span 5;--bg:#FFF1C7}
+.rev-2{grid-column:span 7;--bg:#FBE3F4}
+.rev-3{grid-column:span 7;--bg:#D4F1E8}
+.rev-4{grid-column:span 5;--bg:#D9ECF8}
+
+/* тест: приглашение */
+.quiz-promo{margin:0 clamp(8px,1.8vw,24px) 100px;padding:80px 0;border-radius:clamp(28px,4vw,56px);background:var(--sky)}
+.quiz-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:56px;align-items:center}
+.quiz-grid p{margin:18px 0 28px;max-width:30em;font-size:1.15rem}
+.quiz-grid .btn-ink:hover{box-shadow:4px 4px 0 var(--cream)}
+.ladder{display:grid;gap:10px;justify-items:start}
+.ladder li{display:flex;align-items:center;gap:14px;width:var(--w);min-width:250px;padding:11px 18px 11px 12px;border-radius:18px;background:var(--cream);border:2px solid var(--ink)}
+.ladder b{display:grid;place-items:center;min-width:48px;height:34px;border-radius:99px;background:var(--c);border:2px solid var(--ink);font:600 .92rem/1 var(--display);letter-spacing:-.03em}
+.ladder span{font-weight:600}
 
 /* ───────── конструктор ───────── */
 .enroll{
@@ -163,17 +192,15 @@ h3{font:700 1.1rem/1.25 var(--text)}
 .enroll .sec-head p{color:rgba(13,18,22,.78)}
 .enroll-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.8fr);gap:28px;align-items:start}
 .steps{display:grid;gap:16px;counter-reset:step}
-.step{background:var(--cream);border-radius:30px;padding:28px;border:2px solid var(--ink)}
+.step{margin:0;min-width:0;background:var(--cream);border-radius:30px;padding:28px;border:2px solid var(--ink)}
 .step:not([hidden]){counter-increment:step}
 .step-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
 .step-head::before{content:counter(step);flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--cream);font:500 .95rem/1 var(--display)}
 .step-head h3{font-size:1.3rem}
 .sub{margin:22px 0 10px;font-weight:600}
-.sub:first-of-type{margin-top:0}
 .hint{margin-top:10px;color:var(--muted);font-size:.95rem}
 
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tiles-3{grid-template-columns:1fr}
 .tile{
   position:relative;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:20px;
   background:#fff;border:2px solid var(--line);cursor:pointer;
@@ -187,8 +214,6 @@ h3{font:700 1.1rem/1.25 var(--text)}
 .tile:has(input:checked){border-color:var(--ink);background:var(--tint,#fff);box-shadow:4px 4px 0 var(--ink);transform:translate(-2px,-2px)}
 .tile:has(input:checked)::after{content:"✓";position:absolute;top:10px;right:12px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--cream);font-size:.8rem;font-weight:700}
 .tile:has(input:focus-visible){outline:3px solid var(--sky);outline-offset:3px}
-.tile:has(input:disabled){opacity:.4;cursor:not-allowed;box-shadow:none;transform:none}
-.tile:has(input:disabled) input{cursor:not-allowed}
 .tile-wide{grid-column:1/-1}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -209,7 +234,7 @@ textarea.input{min-height:96px;resize:vertical}
 select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' fill='none'%3E%3Cpath d='M1 1.5 7 7.5l6-6' stroke='%230D1216' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") right 1em center no-repeat;padding-right:2.6em}
 .fields-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .stack{display:grid;gap:18px}
-.err{min-height:0;color:#B3341A;font-size:.92rem;font-weight:500}
+.err{color:#B3341A;font-size:.92rem;font-weight:500}
 .err:empty{display:none}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:.95rem;cursor:pointer}
 .consent input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--ink)}
@@ -219,7 +244,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
 .summary{position:sticky;top:92px;display:grid;gap:14px}
 .ticket-shadow{filter:drop-shadow(0 14px 18px rgba(13,18,22,.22))}
 .ticket{
-  --n:15px;--stub:176px;display:flex;flex-direction:column;background:var(--cream);border-radius:28px;
+  --n:15px;--stub:190px;display:flex;flex-direction:column;background:var(--cream);border-radius:28px;
   -webkit-mask:radial-gradient(circle var(--n) at 0 calc(100% - var(--stub)),#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle var(--n) at 100% calc(100% - var(--stub)),#0000 97%,#000) right/51% 100% no-repeat;
           mask:radial-gradient(circle var(--n) at 0 calc(100% - var(--stub)),#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle var(--n) at 100% calc(100% - var(--stub)),#0000 97%,#000) right/51% 100% no-repeat;
 }
@@ -229,7 +254,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
 .ticket-title{font:600 .95rem/1.2 var(--text)}
 .stamp{margin-left:auto;padding:4px 10px;border:2px solid var(--coral);color:#B3401F;border-radius:8px;font:700 .8rem/1.1 var(--text);transform:rotate(5deg);white-space:nowrap}
 .rows{display:grid;gap:11px}
-.rows>div{display:grid;grid-template-columns:116px 1fr;gap:10px;align-items:baseline;border-radius:6px}
+.rows>div{display:grid;grid-template-columns:104px 1fr;gap:10px;align-items:baseline;border-radius:6px}
 .rows dt{font-size:.85rem;color:var(--muted)}
 .rows dd{font-weight:600;line-height:1.3;overflow-wrap:anywhere}
 .rows dd[data-empty="true"]{color:rgba(13,18,22,.32);font-weight:500}
@@ -263,7 +288,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
 .footer .logo{background:none}
 .copy{margin-top:48px;padding-top:22px;border-top:1px solid rgba(255,251,245,.18);font-size:.9rem;color:rgba(255,251,245,.6)}
 
-/* ───────── диалог и тост ───────── */
+/* ───────── диалоги и тост ───────── */
 dialog{width:min(560px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border:2px solid var(--ink);border-radius:32px;background:var(--cream);color:var(--ink);box-shadow:8px 8px 0 var(--ink)}
 dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 .dlg{padding:30px;display:grid;gap:16px}
@@ -274,25 +299,56 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 #toast{position:fixed;left:50%;bottom:24px;z-index:50;transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:12px 20px;border-radius:99px;background:var(--ink);color:var(--cream);font-weight:500;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);text-align:center}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 
+/* тест уровня */
+#quiz{width:min(680px,calc(100% - 24px));overflow:auto}
+.qz{padding:22px 28px 28px;display:grid;gap:22px}
+.qz-top{display:flex;align-items:center;gap:14px}
+.qz-progress{flex:1;height:14px;border-radius:99px;background:#fff;border:2px solid var(--ink);overflow:hidden}
+.qz-progress span{display:block;height:100%;width:0;background:var(--sun);transition:width .3s ease}
+.qz-count{font-weight:600;font-size:.95rem;white-space:nowrap}
+.qz-x{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);background:#fff;font-size:1.3rem;line-height:1;cursor:pointer;transition:background-color .15s}
+.qz-x:hover{background:var(--sun)}
+.qz-q{font:600 clamp(1.4rem,3.4vw,1.85rem)/1.3 var(--text);letter-spacing:-.01em;text-wrap:balance}
+.qz-q:focus{outline:none}
+.blank{display:inline-block;width:3.4ch;margin:0 .15em;border-bottom:3px solid var(--ink);transform:translateY(2px)}
+.qz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;border:0;padding:0;margin:0;min-width:0}
+.qz-opt{position:relative;display:flex;align-items:center;min-height:62px;padding:14px 18px;border-radius:18px;background:#fff;border:2px solid var(--line);font:600 1.08rem/1.3 var(--text);cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s,background-color .15s}
+.qz-opt input{position:absolute;inset:0;margin:0;opacity:0;cursor:pointer}
+.qz-opt:hover{border-color:rgba(13,18,22,.5)}
+.qz-opt:has(input:checked){border-color:var(--ink);background:#FFF1C7;box-shadow:4px 4px 0 var(--ink);transform:translate(-2px,-2px)}
+.qz-opt:has(input:focus-visible){outline:3px solid var(--sky);outline-offset:3px}
+.qz-skip{grid-column:1/-1;min-height:50px;border-style:dashed;color:var(--muted);font-weight:500}
+.qz-nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.qz-res-head{display:flex;gap:22px;align-items:center}
+.lv-badge{flex:none;display:grid;place-items:center;width:104px;height:104px;border-radius:50%;background:var(--c);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);font:600 2.3rem/1 var(--display);letter-spacing:-.04em}
+.qz-res-head p{color:var(--muted);margin-top:6px}
+.bars{display:grid;gap:8px}
+.bars li{display:grid;grid-template-columns:34px 1fr 38px;gap:10px;align-items:center;font-size:.92rem;font-weight:600}
+.bars i{display:block;height:14px;border-radius:99px;background:#fff;border:2px solid var(--ink);overflow:hidden}
+.bars i::after{content:"";display:block;height:100%;width:var(--p);background:var(--c)}
+.qz-send{display:grid;gap:14px;padding:22px;border-radius:24px;background:#fff;border:2px solid var(--ink)}
+.qz-send p{color:var(--muted);font-size:.98rem}
+.qz-after{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+
 /* ───────── адаптив ───────── */
 @media (max-width:1020px){
   .hero-grid{grid-template-columns:1fr}
   .hero-stage{min-height:380px;max-width:560px}
   .why-list{grid-template-columns:1fr 1fr}
+  .quiz-grid{grid-template-columns:1fr;gap:36px}
   .enroll-grid{grid-template-columns:1fr}
   .summary{position:static;max-width:520px}
-  .teachers-grid{grid-template-columns:1fr}
+  .teacher{grid-template-columns:1fr;gap:28px;padding:32px}
+  .avatar{width:150px;height:150px;font-size:3.8rem}
   .footer-grid{grid-template-columns:1fr 1fr}
   .footer-grid>:first-child{grid-column:1/-1}
 }
 @media (max-width:860px){
   .nav{display:none}
-  .bar{justify-content:space-between}
   .pb-head{display:none}
-  .pb-row{grid-template-columns:1fr 1fr;gap:14px 18px;padding:18px}
-  .pb-main,.pb-format,.pb-row>.btn{grid-column:1/-1}
-  .pb-price .lbl{display:block}
-  .pb-span{grid-column:1/-1}
+  .pb-row{grid-template-columns:1fr;gap:12px;padding:18px}
+  .pb-row>.btn{width:100%}
+  .rev-1,.rev-2,.rev-3,.rev-4{grid-column:1/-1}
 }
 @media (max-width:640px){
   .hero{padding:118px 0 80px}
@@ -301,13 +357,18 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   .why{padding-bottom:64px}
   .why-list{grid-template-columns:1fr}
   .section{padding-bottom:72px}
+  .quiz-promo{padding:56px 0;margin-bottom:72px}
   .enroll{padding:64px 0;margin-bottom:72px}
   .step{padding:22px 18px}
   .tiles{grid-template-columns:1fr}
   .fields-2{grid-template-columns:1fr}
-  .teacher{grid-template-columns:1fr;padding:24px}
-  .avatar{width:88px;height:88px;font-size:2.2rem}
-  .rows>div{grid-template-columns:108px 1fr}
+  .teacher{padding:24px;border-radius:32px}
+  .rev{padding:24px 22px 22px}
+  .rows>div{grid-template-columns:100px 1fr}
+  .qz{padding:18px 18px 22px}
+  .qz-opts{grid-template-columns:1fr}
+  .qz-res-head{gap:16px}
+  .lv-badge{width:84px;height:84px;font-size:1.8rem}
   .footer-grid{grid-template-columns:1fr}
   .logo-name{display:none}
 }
@@ -329,7 +390,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     </a>
     <nav class="nav" aria-label="Разделы сайта">
       <a href="#prices">Программы и цены</a>
-      <a href="#teachers">Преподаватели</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#test">Узнать уровень</a>
       <a href="#faq">Вопросы</a>
     </nav>
     <a class="btn btn-ink btn-sm" href="#enroll">Записаться</a>
@@ -342,10 +404,10 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <h1>Английский<br>легко и весело</h1>
-        <p class="lead">Онлайн-школа HowToSayDasha: занятия для детей и взрослых с сертифицированными преподавателями. Первое пробное занятие бесплатно.</p>
+        <p class="lead">Онлайн-школа HowToSayDasha: занятия для детей и взрослых с сертифицированным преподавателем. Первое пробное занятие бесплатно.</p>
         <div class="hero-actions">
           <a class="btn btn-ink" href="#enroll">Записаться на пробный урок</a>
-          <a class="btn btn-ghost" href="#prices">Смотреть цены</a>
+          <a class="btn btn-ghost" href="#test">Узнать свой уровень</a>
         </div>
       </div>
 
@@ -368,7 +430,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 
   <section class="why wrap" aria-label="Почему выбирают нас">
     <ul class="why-list">
-      <li style="--c:var(--sun)"><h3>Сертифицированные преподаватели</h3><p>Международные сертификаты и опыт от 8 лет.</p></li>
+      <li style="--c:var(--sun)"><h3>Сертифицированный преподаватель</h3><p>Международные сертификаты и 8 лет опыта.</p></li>
       <li style="--c:var(--sky)"><h3>Программа под вас</h3><p>Учитываем уровень и цели с первого урока.</p></li>
       <li style="--c:var(--mint)"><h3>Удобный график</h3><p>Онлайн из любой точки мира, время выбираете вы.</p></li>
       <li style="--c:var(--coral)"><h3>Видимый результат</h3><p>При 2–3 занятиях в неделю первые успехи заметны через 1–2 месяца.</p></li>
@@ -379,40 +441,76 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     <div class="wrap">
       <div class="sec-head">
         <h2>Программы и цены</h2>
-        <p>Цена указана за пакет занятий. У преподавателей она разная — выберите, как вам удобнее.</p>
+        <p>Цена указана за пакет занятий. Первое пробное занятие бесплатное.</p>
       </div>
-      <div class="pb-head" aria-hidden="true"><span>Программа</span><span>Формат</span><span>Дарья</span><span>Эрик</span><span style="width:96px"></span></div>
+      <div class="pb-head" aria-hidden="true"><span>Программа</span><span>Формат</span><span>Стоимость пакета</span><span style="width:96px"></span></div>
       <ul class="pb-list" id="priceList"></ul>
-      <p class="note">Первое пробное занятие бесплатное. Перед стартом бесплатно проверим уровень.</p>
+      <p class="note">Не знаете свой уровень? <button class="link" type="button" data-open-quiz>Пройдите тест за 7 минут</button> или мы бесплатно проверим его перед стартом.</p>
     </div>
   </section>
 
   <section class="section" id="teachers">
     <div class="wrap">
+      <div class="sec-head"><h2>Ваш преподаватель</h2></div>
+      <article class="teacher">
+        <div class="avatar" aria-hidden="true">Д</div>
+        <div class="teacher-body">
+          <h3>Дарья Солдатова</h3>
+          <p>Сертифицированный преподаватель английского с 8-летним опытом. Работает по коммуникативной методике и специализируется на бизнес-английском. Практикующий переводчик: синхронный перевод офлайн и онлайн, проекты для Xiaomi, OZON и FLYFILM.</p>
+          <ul class="facts">
+            <li style="--c:var(--sun)">Обучала студентов из Германии, Норвегии, Индонезии, Таиланда, Испании, Грузии и других стран</li>
+            <li style="--c:var(--sky)">Разбирает рабочие ситуации и помогает уверенно говорить в жизни и профессии</li>
+          </ul>
+          <blockquote>Каждое занятие — под ваш конкретный запрос, без шаблонных уроков. Моя задача — чтобы вы говорили свободно и уверенно.</blockquote>
+          <ul class="tags"><li>Бизнес-английский</li><li>Дети с 4 лет</li><li>Разговорная практика</li></ul>
+          <a class="btn btn-ink" href="#enroll">Записаться к Дарье</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="reviews">
+    <div class="wrap">
       <div class="sec-head">
-        <h2>Преподаватели</h2>
-        <p>Два преподавателя с разным опытом. Если не уверены, кого выбрать, подскажем по вашей цели и возрасту.</p>
+        <h2>Отзывы студентов</h2>
+        <p>Что говорят о занятиях студенты и их родители.</p>
       </div>
-      <div class="teachers-grid">
-        <article class="teacher" style="--bg:#FBE3F4;--c:var(--pink)">
-          <div class="avatar" aria-hidden="true">Д</div>
-          <div>
-            <h3>Дарья Солдатова</h3>
-            <p>Сертифицированный преподаватель с 8-летним опытом. Работает по коммуникативной методике, специализируется на бизнес-английском. Практикующий переводчик: работала с Xiaomi, OZON и FLYFILM.</p>
-            <ul class="tags"><li>Бизнес-английский</li><li>Дети с 4 лет</li><li>Разговорная практика</li></ul>
-            <a class="btn btn-ink btn-sm" href="#enroll" data-pick="teacher:daria">Заниматься с Дарьей</a>
-          </div>
-        </article>
-        <article class="teacher" style="--bg:#D9ECF8;--c:var(--sky)">
-          <div class="avatar" aria-hidden="true">Э</div>
-          <div>
-            <h3>Эрик Фури</h3>
-            <p>Носитель языка из ЮАР, 10 лет преподавательского опыта. Эксперт по подготовке к международным экзаменам. TEFL-сертификат Language Centre Стелленбосского университета.</p>
-            <ul class="tags"><li>Носитель языка</li><li>Международные экзамены</li><li>Дети с 7 лет</li></ul>
-            <a class="btn btn-ink btn-sm" href="#enroll" data-pick="teacher:eric">Заниматься с Эриком</a>
-          </div>
-        </article>
+      <div class="rev-grid">
+        <figure class="rev rev-1">
+          <blockquote><p>Я очень много путешествую, и занятия помогли мне наконец избавиться от языкового барьера. Теперь я спокойно понимаю речь на слух и свободно общаюсь с людьми в любых ситуациях. Это ощущение свободы — невероятное!</p></blockquote>
+          <figcaption><b>tanya_terentevaaa, 30</b><span>Индивидуальные занятия</span></figcaption>
+        </figure>
+        <figure class="rev rev-2">
+          <blockquote><p>С Дарьей я преодолела разговорный барьер, перешла из российской компании в международную, увеличила доход и стала участником проекта на Пангане. Теперь уверенно веду бизнес-встречи и продолжаю заниматься бизнес-английским.</p></blockquote>
+          <figcaption><b>Ruzavina Elizaveta, 21</b><span>Бизнес-английский</span></figcaption>
+        </figure>
+        <figure class="rev rev-3">
+          <blockquote><p>Я живу в Дубае, и мой бизнес — это постоянная работа с людьми из разных стран. Благодаря групповым урокам с Дарьей мой английский прокачался настолько, что доход вырос в два раза, появилось больше клиентов, а ещё… я познакомилась с классным парнем! Эти занятия реально меняют жизнь — в работе и в личном.</p></blockquote>
+          <figcaption><b>Yana Kuznetsova</b><span>Групповые занятия</span></figcaption>
+        </figure>
+        <figure class="rev rev-4">
+          <blockquote><p>Мне 10 лет, и я занимаюсь английским несколько лет. Я уже читаю книги сам, понимаю сложные правила и могу спокойно говорить. Мне очень нравится учиться, нет проблем с домашкой в школе, потому что всё понятно и интересно!</p></blockquote>
+          <figcaption><b>Егор, 10</b><span>Детские занятия</span></figcaption>
+        </figure>
       </div>
+    </div>
+  </section>
+
+  <!-- ═════════ приглашение на тест ═════════ -->
+  <section class="quiz-promo" id="test" aria-labelledby="testTitle">
+    <div class="wrap quiz-grid">
+      <div>
+        <h2 id="testTitle">Узнайте свой уровень английского</h2>
+        <p>20 вопросов, около 7 минут. Результат покажем сразу, а Дарья пришлёт в Telegram материалы для вашего уровня.</p>
+        <button class="btn btn-ink" type="button" data-open-quiz>Пройти тест</button>
+      </div>
+      <ul class="ladder" aria-label="Уровни английского от A1 до C1">
+        <li style="--w:100%;--c:var(--mint)"><b>C1</b><span>Продвинутый</span></li>
+        <li style="--w:90%;--c:var(--sky)"><b>B2</b><span>Выше среднего</span></li>
+        <li style="--w:80%;--c:var(--coral)"><b>B1</b><span>Средний</span></li>
+        <li style="--w:70%;--c:var(--tang)"><b>A2</b><span>Элементарный</span></li>
+        <li style="--w:60%;--c:var(--sun)"><b>A1</b><span>Начальный</span></li>
+      </ul>
     </div>
   </section>
 
@@ -421,14 +519,14 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     <div class="wrap">
       <div class="sec-head">
         <h2>Соберите свой урок</h2>
-        <p>Ответьте на несколько вопросов — преподаватель сразу поймёт, что вам нужно. Справа видно, что получается, и сколько это стоит.</p>
+        <p>Ответьте на несколько вопросов — Дарья сразу поймёт, что вам нужно. Справа видно, что получается, и сколько это стоит.</p>
       </div>
 
       <div class="enroll-grid">
         <form class="steps" id="enrollForm" novalidate autocomplete="on">
 
           <!-- 1 -->
-          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+          <fieldset class="step">
             <legend class="sr-only">Программа</legend>
             <div class="step-head"><h3>Что хотите изучать?</h3></div>
             <div class="tiles" id="programTiles"></div>
@@ -441,38 +539,24 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
               </select>
               <p class="err" data-err="age" role="alert"></p>
             </div>
-
-            <div id="sizeField" hidden style="margin-top:22px">
-              <p class="sub">Размер группы</p>
-              <div class="chips" id="sizeChips"></div>
-              <p class="hint">Чем меньше группа, тем больше внимания каждому. Занятия по 80 минут.</p>
-            </div>
           </fieldset>
 
           <!-- 2 -->
-          <fieldset class="step" id="teacherStep" style="border:2px solid var(--ink);margin:0;min-width:0">
-            <legend class="sr-only">Преподаватель</legend>
-            <div class="step-head"><h3>С кем будете заниматься?</h3></div>
-            <div class="tiles tiles-3" id="teacherTiles"></div>
-            <p class="hint" id="teacherHint" hidden></p>
-          </fieldset>
-
-          <!-- 3 -->
-          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+          <fieldset class="step">
             <legend class="sr-only">Уровень и цели</legend>
             <div class="step-head"><h3>Расскажите об уровне и целях</h3></div>
-            <p class="sub">Уровень английского</p>
+            <p class="sub" style="margin-top:0">Уровень английского</p>
             <div class="chips" id="levelChips"></div>
-            <p class="hint">Не уверены — не страшно. Перед стартом бесплатно проверим уровень.</p>
+            <p class="hint">Не уверены — не страшно. <button class="link" type="button" data-open-quiz>Пройдите тест уровня</button> за 7 минут или мы бесплатно проверим его перед стартом.</p>
             <p class="sub">Зачем нужен английский? <span style="font-weight:400;color:var(--muted)">Можно выбрать несколько</span></p>
             <div class="chips" id="goalChips"></div>
           </fieldset>
 
-          <!-- 4 -->
-          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+          <!-- 3 -->
+          <fieldset class="step">
             <legend class="sr-only">Расписание</legend>
             <div class="step-head"><h3>Когда удобно заниматься?</h3></div>
-            <p class="sub">Дни недели</p>
+            <p class="sub" style="margin-top:0">Дни недели</p>
             <div class="chips" id="dayChips"></div>
             <p class="sub">Время суток</p>
             <div class="chips" id="timeChips"></div>
@@ -482,8 +566,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
             </div>
           </fieldset>
 
-          <!-- 5 -->
-          <fieldset class="step" style="border:2px solid var(--ink);margin:0;min-width:0">
+          <!-- 4 -->
+          <fieldset class="step">
             <legend class="sr-only">Контакты</legend>
             <div class="step-head"><h3>Как с вами связаться?</h3></div>
             <div class="stack">
@@ -530,8 +614,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
                 </div>
                 <dl class="rows">
                   <div><dt>Программа</dt><dd data-out="program" data-empty="true">—</dd></div>
-                  <div><dt>Преподаватель</dt><dd data-out="teacher" data-empty="true">—</dd></div>
-                  <div><dt data-out="detailLabel">Детали</dt><dd data-out="detail" data-empty="true">—</dd></div>
+                  <div><dt data-out="detailLabel">Формат</dt><dd data-out="detail" data-empty="true">—</dd></div>
                   <div><dt>Уровень</dt><dd data-out="level" data-empty="true">—</dd></div>
                   <div><dt>Цели</dt><dd data-out="goals" data-empty="true">—</dd></div>
                   <div><dt>Когда удобно</dt><dd data-out="when" data-empty="true">—</dd></div>
@@ -544,7 +627,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
               </div>
             </div>
           </div>
-          <button class="btn btn-ink btn-block" type="submit" form="enrollForm">Записаться на пробный урок</button>
+          <button class="btn btn-ink btn-block" type="submit" form="enrollForm" id="enrollSubmit">Записаться на пробный урок</button>
           <p class="fine">Первое пробное занятие бесплатное.</p>
         </aside>
       </div>
@@ -555,8 +638,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     <div class="wrap">
       <div class="sec-head"><h2>Частые вопросы</h2></div>
       <div class="faq-list">
-        <details><summary>Какой уровень нужен, чтобы начать?</summary><p>Любой: от нуля до продвинутого. Перед началом занятий бесплатно проверим уровень.</p></details>
-        <details><summary>Сколько длится один урок?</summary><p>Для малышей 40 минут, чтобы удержать внимание. Для школьников и взрослых 45–60 минут. Групповые занятия длятся 80 минут.</p></details>
+        <details><summary>Какой уровень нужен, чтобы начать?</summary><p>Любой: от нуля до продвинутого. Перед началом занятий бесплатно проверим уровень или вы можете пройти тест на сайте.</p></details>
+        <details><summary>Сколько длится один урок?</summary><p>Для малышей 40 минут, чтобы удержать внимание. Для школьников и взрослых 45–60 минут. Групповые занятия длятся 90 минут.</p></details>
         <details><summary>Когда будут первые результаты?</summary><p>При регулярных занятиях 2–3 раза в неделю первые результаты заметны через 1–2 месяца. До среднего уровня обычно нужно 6–12 месяцев.</p></details>
         <details><summary>Можно ли перенести занятие?</summary><p>Да, предупредите преподавателя минимум за 12 часов, и мы найдём другое время. Занятия, пропущенные без предупреждения, не компенсируются.</p></details>
         <details><summary>Как оплачивать занятия?</summary><p>Помесячно или пакетами занятий: картой, переводом на карту или через платёжные системы. Первое пробное занятие бесплатно.</p></details>
@@ -581,7 +664,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
         <h3>Контакты</h3>
         <ul>
           <li><a href="mailto:HowToSayDasha@mail.ru">HowToSayDasha@mail.ru</a></li>
-          <li><a href="tel:+79822734618">+7 982 273-46-18</a></li>
+          <li><a href="tel:+79507351632">+7 950 735-16-32</a></li>
         </ul>
       </div>
       <div>
@@ -597,6 +680,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   </div>
 </footer>
 
+<!-- заявка: что делать дальше -->
 <dialog id="done" aria-labelledby="doneTitle">
   <div class="dlg">
     <h2 id="doneTitle">Осталось отправить заявку</h2>
@@ -610,84 +694,145 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     <form method="dialog" class="dlg-close"><button class="btn btn-sm btn-ghost">Закрыть</button></form>
   </div>
 </dialog>
+
+<!-- тест уровня -->
+<dialog id="quiz" aria-label="Тест уровня английского">
+  <div class="qz">
+    <div class="qz-top">
+      <div class="qz-progress" id="qzProgress" role="progressbar" aria-label="Прогресс теста" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"><span id="qzBar"></span></div>
+      <span class="qz-count" id="qzCount">1 из 20</span>
+      <button class="qz-x" type="button" data-qz="close" aria-label="Закрыть тест">×</button>
+    </div>
+    <div id="qzBody"></div>
+  </div>
+</dialog>
+
 <div id="toast" role="status" aria-live="polite"></div>
 
-<noscript><p style="padding:24px;text-align:center">Для работы конструктора включите JavaScript. Или напишите нам: HowToSayDasha@mail.ru, +7 982 273-46-18.</p></noscript>
+<noscript><p style="padding:24px;text-align:center">Для работы сайта включите JavaScript. Или напишите нам: HowToSayDasha@mail.ru, +7 950 735-16-32.</p></noscript>
 
 <script>
 (() => {
   'use strict';
 
   /* ── Настройки ──────────────────────────────────────────────
-     FORM_ENDPOINT — адрес, куда отправлять заявки (например, Formspree:
-     'https://formspree.io/f/xxxxxxx'). Пока пусто — после нажатия на кнопку
-     заявка собирается в текст, который можно отправить в Telegram или на почту. */
-  const FORM_ENDPOINT = '';
+     NOTIFY_URL — адрес воркера (папка worker/), который отправляет заявки и
+     результаты теста в Telegram-бота, например 'https://htsd-notify.имя.workers.dev'.
+     Пока пусто, после нажатия на кнопку заявка собирается в текст, который
+     можно отправить в Telegram или на почту вручную. */
+  const NOTIFY_URL    = '';
   const CONTACT_EMAIL = 'HowToSayDasha@mail.ru';
   const TELEGRAM_URL  = 'https://t.me/howtosaydasha';
 
-  /* ── Данные: преподаватели, программы, цены (по их прайсу) ── */
-  const TEACHERS = {
-    daria: { name: 'Дарья Солдатова', short: 'Дарья', kidsFrom: 4, ico: 'Д', c: 'var(--pink)',  hint: '8 лет опыта, бизнес-английский' },
-    eric:  { name: 'Эрик Фури',       short: 'Эрик',  kidsFrom: 7, ico: 'Э', c: 'var(--sky)',   hint: 'Носитель из ЮАР, экзамены' },
-  };
+  /* ── Данные: программы и цены ── */
   const PROGRAMS = {
-    kids:       { title: 'Детские занятия',      ico: '🧸', c: 'var(--sun)',   tint: '#FFF1C7', lessons: 10, min: 40,
-                  desc: 'Песни, игры и творчество. Помогаем с домашкой и работаем по запросу родителей.',
-                  price: { daria: 15000, eric: 25000 } },
-    individual: { title: 'Индивидуальные',       ico: '🎯', c: 'var(--sky)',   tint: '#D9ECF8', lessons: 10, min: 45,
-                  desc: 'Персональная программа под ваши цели и уровень, расписание — как удобно вам.',
-                  price: { daria: 35000, eric: 50000 } },
-    group:      { title: 'Групповые занятия',    ico: '👥', c: 'var(--mint)',  tint: '#D4F1E8', lessons: 20, min: 80,
-                  desc: 'Группы по уровням. В подарок — уроки разговорного клуба с носителем.',
-                  sizes: { '4–6': { daria: 40000, eric: 55000 }, '6–8': { daria: 35000, eric: 50000 }, '8–10': { daria: 30000, eric: 45000 } } },
-    business:   { title: 'Бизнес-английский',    ico: '💼', c: 'var(--coral)', tint: '#FADDD3', lessons: 10, min: 60,
-                  desc: 'Деловая лексика, презентации и переговоры для работы в международной среде.',
-                  price: { daria: 45000, eric: 60000 } },
-    club:       { title: 'SpeakingClub',         ico: '🎤', c: 'var(--tang)',  tint: '#FDE2C6',
-                  desc: 'Разговорная практика онлайн. Старт 24.11.', fmt: 'Старт 24.11' },
+    kids:       { title: 'Детские занятия',     ico: '🧸', c: 'var(--sun)',   tint: '#FFF1C7', lessons: 10, min: 40, price: 20000,
+                  desc: 'Дети 4–18 лет. Песни, игры и творчество. Помогаем с домашкой и работаем по запросу родителей.' },
+    individual: { title: 'Индивидуальные',      ico: '🎯', c: 'var(--sky)',   tint: '#D9ECF8', lessons: 10, min: 45, price: 40000,
+                  desc: 'Персональная программа под ваши цели и уровень, расписание — как удобно вам.' },
+    group:      { title: 'Групповые занятия',   ico: '👥', c: 'var(--mint)',  tint: '#D4F1E8', lessons: 20, min: 90, price: 30000,
+                  offer: { price: 25000, note: 'при оплате в первые 24 часа' },
+                  desc: 'Группы по уровням. Бонусные уроки разговорного клуба.' },
+    business:   { title: 'Бизнес-английский',   ico: '💼', c: 'var(--coral)', tint: '#FADDD3', lessons: 10, min: 60, price: 45000,
+                  desc: 'Деловая лексика, презентации и переговоры для работы в международной среде.' },
+    club:       { title: 'SpeakingClub',        ico: '🎤', c: 'var(--tang)',  tint: '#FDE2C6', fmt: 'Старт 24.11',
+                  desc: 'Разговорная практика онлайн. Старт 24.11.' },
   };
   const LEVELS = { unknown: 'Не знаю, проверьте', start: 'С нуля', basic: 'Базовый (A1–A2)', mid: 'Средний (B1–B2)', adv: 'Продвинутый (C1+)' };
   const GOALS  = ['✈️ Путешествия', '💼 Работа и карьера', '🎓 Экзамены', '🏫 Школа', '💬 Разговорный барьер', '🌍 Переезд', '🎬 Для души'];
   const DAYS   = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
   const TIMES  = ['Утро, до 12', 'День, 12–17', 'Вечер, после 17'];
   const CTYPES = {
-    tg:    { label: 'Telegram', ph: '@username',            type: 'text',  name: 'Telegram' },
-    wa:    { label: 'WhatsApp', ph: '+7 900 000-00-00',     type: 'tel',   name: 'WhatsApp' },
-    phone: { label: 'Звонок',   ph: '+7 900 000-00-00',     type: 'tel',   name: 'Телефон' },
-    email: { label: 'Почта',    ph: 'name@mail.ru',         type: 'email', name: 'Почта' },
+    tg:    { label: 'Telegram', ph: '@username',        type: 'text',  name: 'Telegram' },
+    wa:    { label: 'WhatsApp', ph: '+7 900 000-00-00', type: 'tel',   name: 'WhatsApp' },
+    phone: { label: 'Звонок',   ph: '+7 900 000-00-00', type: 'tel',   name: 'Телефон' },
+    email: { label: 'Почта',    ph: 'name@mail.ru',     type: 'email', name: 'Почта' },
   };
 
+  /* ── Данные: тест уровня (по 4 вопроса на каждый уровень, o[0] — верный ответ,
+        порядок вариантов при показе перемешивается) ── */
+  const QUIZ = [
+    { l: 'A1', q: 'She ___ a teacher.',                         o: ['is', 'are', 'am', 'be'] },
+    { l: 'A1', q: 'I ___ coffee every morning.',                o: ['drink', 'drinks', 'am drink', 'drinking'] },
+    { l: 'A1', q: 'How ___ brothers do you have?',              o: ['many', 'much', 'long', 'old'] },
+    { l: 'A1', q: 'There ___ two books on the table.',          o: ['are', 'is', 'am', 'be'] },
+    { l: 'A2', q: 'Yesterday we ___ to the cinema.',            o: ['went', 'go', 'goes', 'gone'] },
+    { l: 'A2', q: 'My brother is ___ than me.',                 o: ['taller', 'more tall', 'tallest', 'the taller'] },
+    { l: 'A2', q: 'What ___ you doing at the moment?',          o: ['are', 'do', 'is', 'did'] },
+    { l: 'A2', q: 'We ___ have a car, so we take the bus.',     o: ['don’t', 'doesn’t', 'aren’t', 'isn’t'] },
+    { l: 'B1', q: 'If it rains tomorrow, we ___ at home.',      o: ['will stay', 'would stay', 'stayed', 'had stayed'] },
+    { l: 'B1', q: 'I have lived in this city ___ 2015.',        o: ['since', 'for', 'from', 'during'] },
+    { l: 'B1', q: 'This book ___ by millions of people around the world.', o: ['has been read', 'has read', 'is reading', 'reads'] },
+    { l: 'B1', q: 'You ___ wear a seatbelt. It’s the law.',     o: ['must', 'can', 'may', 'might'] },
+    { l: 'B2', q: 'I wish I ___ more free time.',               o: ['had', 'have', 'would have', 'will have'] },
+    { l: 'B2', q: 'By the time we arrived, the film ___.',      o: ['had already started', 'has already started', 'was already starting', 'already starts'] },
+    { l: 'B2', q: 'He denied ___ the window.',                  o: ['breaking', 'to break', 'break', 'broke'] },
+    { l: 'B2', q: 'Not only ___ late, but he also forgot the documents.', o: ['was he', 'he was', 'did he be', 'were he'] },
+    { l: 'C1', q: 'The minister was widely criticised, but she refused to ___.', o: ['back down', 'back in', 'come up', 'set off'] },
+    { l: 'C1', q: 'Hardly ___ the office when it started to rain.', o: ['had she left', 'she had left', 'did she leave', 'she has left'] },
+    { l: 'C1', q: 'Her speech was so ___ that many people in the audience were moved to tears.', o: ['poignant', 'pungent', 'plausible', 'petulant'] },
+    { l: 'C1', q: 'I’d rather you ___ anything about it to anyone.', o: ['didn’t say', 'don’t say', 'won’t say', 'not say'] },
+  ];
+  const QL = ['A1', 'A2', 'B1', 'B2', 'C1'];
+  const QINFO = {
+    A1: { name: 'Начальный',     c: 'var(--sun)',   text: 'Вы знаете базовые слова и фразы. Начнём с основ: простые диалоги, повседневная лексика, первые уверенные шаги в разговоре.' },
+    A2: { name: 'Элементарный',  c: 'var(--tang)',  text: 'Вы справляетесь с простыми повседневными ситуациями. Пора расширять словарь и учиться говорить связнее.' },
+    B1: { name: 'Средний',       c: 'var(--coral)', text: 'Вы понимаете суть речи и можете объясниться в большинстве ситуаций. Самое время избавляться от языкового барьера.' },
+    B2: { name: 'Выше среднего', c: 'var(--sky)',   text: 'Вы свободно общаетесь на знакомые темы. Дальше работаем над точностью, богатой лексикой и уверенностью на переговорах.' },
+    C1: { name: 'Продвинутый',   c: 'var(--mint)',  text: 'Вы свободно выражаете мысли в работе и учёбе. Шлифуем нюансы, идиомы и стиль.' },
+  };
+  const levelFor = n => (n <= 4 ? 'A1' : n <= 8 ? 'A2' : n <= 12 ? 'B1' : n <= 16 ? 'B2' : 'C1');
+  const FORM_LEVEL = { A1: 'start', A2: 'basic', B1: 'mid', B2: 'mid', C1: 'adv' };
+
+  /* ── Общие помощники ── */
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const rub = n => n.toLocaleString('ru-RU') + ' ₽';
-  const fmtOf = p => p.lessons ? `${p.lessons} уроков по ${p.min} минут` : p.fmt;
+  const fmtOf = p => (p.lessons ? `${p.lessons} уроков по ${p.min} минут` : p.fmt);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const tgNorm = v => String(v || '').trim().replace(/^(?:https?:\/\/)?t\.me\//i, '').replace(/^@/, '');
+  const TG_RE = /^[A-Za-z][A-Za-z0-9_]{4,31}$/;
 
-  const priceFor = (pid, tid, size) => {
-    const p = PROGRAMS[pid];
-    if (!p) return null;
-    const v = p.sizes ? (p.sizes[size] || {})[tid] : (p.price || {})[tid];
-    return v ?? null;
-  };
-  const teachersFor = (pid, age) =>
-    Object.keys(TEACHERS).filter(t => !(pid === 'kids' && age && age < TEACHERS[t].kidsFrom));
+  let testResult = null; // результат последнего пройденного теста
+
+  async function post(path, body) {
+    const r = await fetch(NOTIFY_URL.replace(/\/+$/, '') + path, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+    });
+    if (!r.ok) throw new Error(r.status);
+    return r.json().catch(() => ({}));
+  }
+  async function copyText(t) {
+    try { await navigator.clipboard.writeText(t); return true; }
+    catch {
+      const ta = document.createElement('textarea');
+      ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch {}
+      ta.remove(); return ok;
+    }
+  }
+  let toastTimer;
+  function toast(text) {
+    const t = $('#toast'); t.textContent = text; t.classList.add('on');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 3200);
+  }
+  const mailto = (subject, body) => `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   /* ── Прайс-лист ── */
   function renderPriceList() {
-    const cell = (pid, tid) => {
-      const p = PROGRAMS[pid];
-      let v, from = '';
-      if (p.sizes) { v = Math.min(...Object.values(p.sizes).map(s => s[tid])); from = 'от '; }
-      else v = p.price[tid];
-      return `<div class="pb-price"><span class="lbl">${TEACHERS[tid].short}</span><strong>${from}${rub(v)}</strong><small>${from}${rub(Math.round(v / p.lessons))} за урок</small></div>`;
-    };
-    $('#priceList').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) => `
+    $('#priceList').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) => {
+      const price = p.lessons
+        ? `<div class="pb-price"><strong>${rub(p.price)}</strong><small>${rub(Math.round(p.price / p.lessons))} за урок</small>${p.offer ? `<span class="deal">${rub(p.offer.price)} ${p.offer.note}</span>` : ''}</div>`
+        : '<div class="pb-price"><strong class="soft">Назовём при записи</strong><small>Старт 24.11</small></div>';
+      return `
       <li class="pb-row" style="--c:${p.c}">
         <div class="pb-main"><span class="ico" aria-hidden="true">${p.ico}</span><div><h3>${p.title}</h3><p>${p.desc}</p></div></div>
         <div class="pb-format">${fmtOf(p)}</div>
-        ${p.lessons ? cell(pid, 'daria') + cell(pid, 'eric') : '<div class="pb-price pb-span"><b>Стоимость назовём при записи.</b> Это разговорный клуб, который стартует 24.11.</div>'}
+        ${price}
         <a class="btn btn-ink btn-sm" href="#enroll" data-pick="program:${pid}" aria-label="Выбрать: ${p.title}">Выбрать</a>
-      </li>`).join('');
+      </li>`;
+    }).join('');
   }
 
   /* ── Поля конструктора ── */
@@ -705,13 +850,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   function renderFields() {
     $('#programTiles').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) =>
       tile('program', pid, p.ico, p.c, p.tint, p.title, fmtOf(p), pid === 'club')).join('');
-    $('#teacherTiles').innerHTML =
-      Object.entries(TEACHERS).map(([tid, t]) => tile('teacher', tid, t.ico, t.c, '#fff', t.name, t.hint)).join('') +
-      tile('teacher', 'any', '✨', 'var(--sun)', '#fff', 'Помогите выбрать', 'Подскажем по вашей цели и возрасту');
-    $('input[name="teacher"][value="any"]').checked = true;
-
     $('#age').insertAdjacentHTML('beforeend', Array.from({ length: 15 }, (_, i) => `<option value="${i + 4}">${i + 4} ${i + 4 < 5 ? 'года' : 'лет'}</option>`).join(''));
-    $('#sizeChips').innerHTML = Object.keys(PROGRAMS.group.sizes).map(s => chip('radio', 'size', s, `${s} человек`, s === '6–8')).join('');
     $('#levelChips').innerHTML = Object.entries(LEVELS).map(([k, v]) => chip('radio', 'level', k, v)).join('');
     $('#goalChips').innerHTML = GOALS.map(g => chip('checkbox', 'goal', g, g)).join('');
     $('#dayChips').innerHTML = DAYS.map(d => chip('checkbox', 'day', d, d)).join('');
@@ -723,7 +862,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     const fd = new FormData(form);
     const g = k => (fd.get(k) || '').toString().trim();
     return {
-      program: g('program'), teacher: g('teacher') || 'any', size: g('size') || '6–8', age: Number(g('age')) || 0,
+      program: g('program'), age: Number(g('age')) || 0,
       level: g('level'), goals: fd.getAll('goal'), days: fd.getAll('day'), times: fd.getAll('time'), tz: g('tz'),
       name: g('name'), ctype: g('ctype') || 'tg', contact: g('contact'), note: g('note'), consent: fd.get('consent') === 'on',
     };
@@ -745,40 +884,19 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     if (!s.program) return { big: '—', sub: 'Выберите программу, и мы покажем цену' };
     const p = PROGRAMS[s.program];
     if (!p.lessons) return { big: 'Назовём при записи', sub: 'SpeakingClub стартует 24.11' };
-    const avail = teachersFor(s.program, s.age);
-    const pool = s.teacher === 'any' ? avail : avail.filter(t => t === s.teacher);
-    const prices = pool.map(t => ({ t, v: priceFor(s.program, t, s.size) })).filter(x => x.v != null);
-    if (!prices.length) return { big: '—', sub: '' };
-    const base = `${p.lessons} уроков по ${p.min} минут`;
-    if (prices.length === 1) {
-      const v = prices[0].v;
-      return { big: rub(v), sub: `${base}\n${rub(Math.round(v / p.lessons))} за урок` };
-    }
-    return { big: 'от ' + rub(Math.min(...prices.map(x => x.v))), sub: prices.map(x => `${TEACHERS[x.t].short} — ${rub(x.v)}`).join(', ') + '\n' + base };
+    let sub = `${fmtOf(p)}, ${rub(Math.round(p.price / p.lessons))} за урок`;
+    if (p.offer) sub += `\nАкция: ${rub(p.offer.price)} ${p.offer.note}`;
+    return { big: rub(p.price), sub };
   }
 
   function sync() {
-    let s = read();
-    const kids = s.program === 'kids', group = s.program === 'group', club = s.program === 'club';
-
+    const s = read();
+    const kids = s.program === 'kids';
     $('#ageField').hidden = !kids;
-    $('#sizeField').hidden = !group;
-    $('#teacherStep').hidden = club;
 
-    // Эрик берёт детей с 7 лет
-    const ericBlocked = kids && s.age > 0 && s.age < TEACHERS.eric.kidsFrom;
-    const ericInput = $('input[name="teacher"][value="eric"]');
-    ericInput.disabled = ericBlocked;
-    if (ericBlocked && s.teacher === 'eric') { $('input[name="teacher"][value="any"]').checked = true; s = read(); }
-    const hint = $('#teacherHint');
-    hint.hidden = !ericBlocked;
-    hint.textContent = ericBlocked ? 'Эрик занимается с детьми от 7 лет, поэтому для этого возраста доступна Дарья.' : '';
-
-    // сводка
     put('program', s.program ? PROGRAMS[s.program].title : '');
-    put('teacher', club ? 'Назначим на старте' : s.teacher === 'any' ? 'Подберём вместе' : TEACHERS[s.teacher].name);
-    out('detailLabel').textContent = kids ? 'Возраст' : group ? 'Группа' : 'Формат';
-    put('detail', kids ? (s.age ? `${s.age} ${s.age < 5 ? 'года' : 'лет'}` : '') : group ? `${s.size} человек` : s.program ? fmtOf(PROGRAMS[s.program]) : '');
+    out('detailLabel').textContent = kids ? 'Возраст' : 'Формат';
+    put('detail', kids ? (s.age ? `${s.age} ${s.age < 5 ? 'года' : 'лет'}` : '') : s.program ? fmtOf(PROGRAMS[s.program]) : '');
     put('level', LEVELS[s.level] || '');
     put('goals', s.goals.map(g => g.replace(/^\S+\s/, '')).join(', '));
     const when = [s.days.length ? s.days.join(', ') : '', s.times.map(t => t.split(',')[0].toLowerCase()).join(', ')].filter(Boolean).join(' · ');
@@ -789,8 +907,10 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     out('priceSub').textContent = q.sub;
   }
 
-  /* ── Выбор из прайса / карточек преподавателей / стикера ── */
+  /* ── Выбор из прайса и со стикера ── */
   document.addEventListener('click', e => {
+    const open = e.target.closest('[data-open-quiz]');
+    if (open) { quizOpen(); return; }
     const a = e.target.closest('[data-pick]');
     if (!a) return;
     const [name, value] = a.dataset.pick.split(':');
@@ -805,11 +925,11 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     inp.autocomplete = c.type === 'email' ? 'email' : c.type === 'tel' ? 'tel' : 'off';
   }
 
-  /* ── Проверка и отправка ── */
+  /* ── Проверка и отправка заявки ── */
   const errEl = k => $(`[data-err="${k}"]`);
   function clearErrors() {
-    $$('.err').forEach(e => (e.textContent = ''));
-    $$('[aria-invalid]').forEach(e => e.removeAttribute('aria-invalid'));
+    $$('.err', form).forEach(e => (e.textContent = ''));
+    $$('[aria-invalid]', form).forEach(e => e.removeAttribute('aria-invalid'));
   }
   function validate(s) {
     const bad = [];
@@ -819,59 +939,40 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     need(s.name.length >= 2, 'name', 'Напишите, как к вам обращаться', $('#name'));
     const digits = s.contact.replace(/\D/g, '');
     const okContact = s.ctype === 'email' ? /^\S+@\S+\.\S+$/.test(s.contact)
-                    : s.ctype === 'tg'    ? s.contact.replace(/^@/, '').length >= 4
+                    : s.ctype === 'tg'    ? TG_RE.test(tgNorm(s.contact))
                     : digits.length >= 10;
-    const msgs = { tg: 'Укажите ваш Telegram, например @username', wa: 'Укажите номер WhatsApp, например +7 900 000-00-00', phone: 'Укажите номер телефона, например +7 900 000-00-00', email: 'Укажите почту, например name@mail.ru' };
+    const msgs = { tg: 'Укажите ваш Telegram, например @username (от 5 символов)', wa: 'Укажите номер WhatsApp, например +7 900 000-00-00', phone: 'Укажите номер телефона, например +7 900 000-00-00', email: 'Укажите почту, например name@mail.ru' };
     need(okContact, 'contact', msgs[s.ctype], $('#contact'));
     need(s.consent, 'consent', 'Поставьте галочку, чтобы мы могли связаться с вами', $('#consent'));
     return bad;
   }
 
-  function buildMessage(s) {
+  function buildLines(s) {
     const p = PROGRAMS[s.program], q = quote(s);
-    const L = [];
-    L.push('Заявка на пробный урок — HowToSayDasha', '');
-    L.push(`Имя: ${s.name}`);
-    L.push(`Связь: ${CTYPES[s.ctype].name}, ${s.contact}`, '');
+    const contact = s.ctype === 'tg' ? '@' + tgNorm(s.contact) : s.contact;
+    const L = [`Имя: ${s.name}`, `Связь: ${CTYPES[s.ctype].name}, ${contact}`, ''];
     L.push(`Программа: ${p.title}${p.lessons ? ` (${fmtOf(p)})` : ' (старт 24.11)'}`);
-    if (s.program !== 'club') L.push(`Преподаватель: ${s.teacher === 'any' ? 'нужна помощь с выбором' : TEACHERS[s.teacher].name}`);
     if (s.program === 'kids') L.push(`Возраст ребёнка: ${s.age}`);
-    if (s.program === 'group') L.push(`Размер группы: ${s.size} человек`);
     L.push(`Уровень: ${LEVELS[s.level] || 'не указан'}`);
+    if (testResult) L.push(`Результат теста: ${testResult.level}, ${testResult.total} из ${testResult.count}`);
     if (s.goals.length) L.push(`Цели: ${s.goals.map(g => g.replace(/^\S+\s/, '')).join(', ')}`);
     if (s.days.length) L.push(`Дни: ${s.days.join(', ')}`);
     if (s.times.length) L.push(`Время: ${s.times.join('; ')}`);
     if (s.tz) L.push(`Город / часовой пояс: ${s.tz}`);
-    if (p.lessons) L.push(`Стоимость: ${q.big}${q.big.startsWith('от') ? '' : ' за пакет'}`);
+    if (p.lessons) L.push(`Стоимость: ${q.big} за пакет${p.offer ? ` (${rub(p.offer.price)} ${p.offer.note})` : ''}`);
     if (s.note) L.push('', `Комментарий: ${s.note}`);
-    return L.join('\n');
-  }
-
-  async function copyText(t) {
-    try { await navigator.clipboard.writeText(t); return true; }
-    catch {
-      const ta = document.createElement('textarea');
-      ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0';
-      document.body.appendChild(ta); ta.select();
-      let ok = false; try { ok = document.execCommand('copy'); } catch {}
-      ta.remove(); return ok;
-    }
-  }
-  let toastTimer;
-  function toast(text) {
-    const t = $('#toast'); t.textContent = text; t.classList.add('on');
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 3200);
+    return L;
   }
 
   const dlg = $('#done');
   function openDone(sent, msg) {
     $('#doneTitle').textContent = sent ? 'Заявка отправлена' : 'Осталось отправить заявку';
     $('#doneText').textContent = sent
-      ? 'Мы свяжемся с вами в ближайшее время. Вот что вы нам прислали:'
+      ? 'Дарья получила вашу заявку и скоро свяжется с вами. Вот что вы отправили:'
       : 'Мы собрали всё, что вы выбрали. Отправьте заявку любым удобным способом, и преподаватель увидит каждую деталь.';
     $('#doneMsg').textContent = msg;
     $('#doneActions').hidden = sent;
-    $('#sendMail').href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Заявка на пробный урок')}&body=${encodeURIComponent(msg)}`;
+    $('#sendMail').href = mailto('Заявка на пробный урок', msg);
     dlg.showModal();
   }
   dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
@@ -890,13 +991,17 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     const bad = validate(s);
     if (bad.length) { bad[0].scrollIntoView({ block: 'center', behavior: 'smooth' }); if (bad[0].focus) bad[0].focus({ preventScroll: true }); return; }
 
-    const msg = buildMessage(s);
-    if (!FORM_ENDPOINT) return openDone(false, msg);
+    const details = buildLines(s).join('\n');
+    const msg = 'Заявка на пробный урок — HowToSayDasha\n\n' + details;
+    if (!NOTIFY_URL) return openDone(false, msg);
+
+    const btn = $('#enrollSubmit'), label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Отправляем…';
     try {
-      const r = await fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ ...s, message: msg }) });
-      if (!r.ok) throw new Error(r.status);
+      await post('/enroll', { details, tg: s.ctype === 'tg' ? tgNorm(s.contact) : '', website: '' });
       openDone(true, msg);
     } catch { openDone(false, msg); }
+    btn.disabled = false; btn.textContent = label;
   });
 
   form.addEventListener('input', e => {
@@ -904,6 +1009,174 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     sync();
   });
   form.addEventListener('change', sync);
+
+  /* ── Тест уровня ── */
+  const qdlg = $('#quiz'), qbody = $('#qzBody'), qbar = $('#qzBar'), qcount = $('#qzCount'), qprog = $('#qzProgress');
+  const qz = { i: 0, picks: [], order: [], res: null, manual: '' };
+  let lastPointer = -1e9;
+
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const setProgress = done => { qbar.style.width = (done / QUIZ.length * 100) + '%'; qprog.setAttribute('aria-valuenow', done); };
+
+  function quizOpen() {
+    qz.i = 0; qz.res = null;
+    qz.picks = Array(QUIZ.length).fill(null);
+    qz.order = QUIZ.map(q => shuffle(q.o.map((_, k) => k)));
+    renderQuestion();
+    if (!qdlg.open) qdlg.showModal();
+  }
+
+  function renderQuestion() {
+    const q = QUIZ[qz.i], picked = qz.picks[qz.i], last = qz.i === QUIZ.length - 1;
+    qcount.textContent = `${qz.i + 1} из ${QUIZ.length}`;
+    setProgress(qz.i);
+    const opts = qz.order[qz.i].map(k => `<label class="qz-opt"><input type="radio" name="qa" value="${k}"${picked === k ? ' checked' : ''}><span>${esc(q.o[k])}</span></label>`).join('');
+    qbody.innerHTML = `
+      <h2 class="qz-q" tabindex="-1">${esc(q.q).replace('___', '<span class="blank"></span><span class="sr-only">пропуск</span>')}</h2>
+      <fieldset class="qz-opts" style="margin-top:22px"><legend class="sr-only">Варианты ответа</legend>${opts}
+        <label class="qz-opt qz-skip"><input type="radio" name="qa" value="-1"${picked === -1 ? ' checked' : ''}><span>Не знаю</span></label>
+      </fieldset>
+      <div class="qz-nav" style="margin-top:22px">
+        <button class="link" type="button" data-qz="back"${qz.i === 0 ? ' hidden' : ''}>Назад</button>
+        <button class="btn btn-ink" type="button" data-qz="next"${picked === null ? ' disabled' : ''} style="margin-left:auto">${last ? 'Узнать результат' : 'Дальше'}</button>
+      </div>`;
+    $('.qz-q', qbody).focus({ preventScroll: true });
+  }
+
+  function nextQuestion() {
+    if (qz.picks[qz.i] === null) return;
+    if (qz.i < QUIZ.length - 1) { qz.i++; renderQuestion(); } else showResult();
+  }
+
+  function score() {
+    const per = {}; QL.forEach(l => (per[l] = [0, 0]));
+    QUIZ.forEach((q, i) => { per[q.l][1]++; if (qz.picks[i] === 0) per[q.l][0]++; });
+    return { per, total: QL.reduce((s, l) => s + per[l][0], 0) };
+  }
+
+  function showResult() {
+    const { per, total } = score(), level = levelFor(total), info = QINFO[level];
+    qz.res = testResult = { level, total, count: QUIZ.length, per };
+    setProgress(QUIZ.length); qcount.textContent = 'Готово';
+
+    // подставляем уровень в конструктор
+    const lv = $(`input[name="level"][value="${FORM_LEVEL[level]}"]`, form);
+    if (lv) { lv.checked = true; sync(); }
+
+    const bars = QL.map(l => `<li style="--c:${QINFO[l].c};--p:${per[l][1] ? per[l][0] / per[l][1] * 100 : 0}%"><span>${l}</span><i></i><span>${per[l][0]}/${per[l][1]}</span></li>`).join('');
+    qbody.innerHTML = `
+      <div class="qz-res-head">
+        <div class="lv-badge" style="--c:${info.c}" aria-hidden="true">${level}</div>
+        <div><h2 class="qz-q" tabindex="-1">Ваш уровень — ${level}, ${info.name.toLowerCase()}</h2><p>${total} из ${QUIZ.length} правильных ответов</p></div>
+      </div>
+      <p style="margin-top:18px">${info.text}</p>
+      <ul class="bars" style="margin-top:18px" aria-label="Результат по уровням">${bars}</ul>
+      <form class="qz-send" id="qzSend" novalidate style="margin-top:22px">
+        <div><h3>Получите материалы для уровня ${level}</h3>
+        <p style="margin-top:6px">Оставьте Telegram: Дарья получит ваш результат и напишет вам с файлом, подобранным под ваш уровень.</p></div>
+        <div class="fields-2">
+          <div class="field"><label for="qzName">Имя <span style="font-weight:400;color:var(--muted)">— по желанию</span></label><input class="input" id="qzName" name="name" autocomplete="given-name" placeholder="Как к вам обращаться"></div>
+          <div class="field"><label for="qzTg">Ваш Telegram</label><input class="input" id="qzTg" name="tg" placeholder="@username" autocomplete="off"></div>
+        </div>
+        <p class="err" data-qerr="tg" role="alert"></p>
+        <div><label class="consent"><input type="checkbox" name="consent"><span>Согласен(на) на обработку персональных данных, чтобы со мной связались</span></label>
+        <p class="err" data-qerr="consent" role="alert"></p></div>
+        <div class="trap" aria-hidden="true"><label>Не заполняйте это поле<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <button class="btn btn-ink btn-block" type="submit">Отправить результат Дарье</button>
+      </form>
+      <div class="qz-after" style="margin-top:20px">
+        <button class="btn btn-ghost" type="button" data-qz="enroll">Записаться на пробный урок</button>
+        <button class="link" type="button" data-qz="retry">Пройти заново</button>
+      </div>`;
+    $('.qz-q', qbody).focus({ preventScroll: true });
+    qdlg.scrollTo({ top: 0 });
+  }
+
+  const testMessage = (r, name, tg) => [
+    'Результат теста уровня — HowToSayDasha', '',
+    name ? `Имя: ${name}` : '',
+    `Telegram: @${tg}`,
+    `Уровень: ${r.level} (${QINFO[r.level].name})`,
+    `Правильных ответов: ${r.total} из ${r.count}`,
+    `По уровням: ${QL.map(l => `${l} ${r.per[l][0]}/${r.per[l][1]}`).join(', ')}`,
+  ].filter((l, i) => l || i === 1).join('\n');
+
+  function showSent(tg) {
+    qbody.innerHTML = `
+      <div class="qz-res-head">
+        <div class="lv-badge" style="--c:var(--mint)" aria-hidden="true">✓</div>
+        <div><h2 class="qz-q" tabindex="-1">Результат отправлен</h2><p>Дарья получила ваш результат и напишет вам в Telegram (@${esc(tg)}) с материалами для уровня ${qz.res.level}.</p></div>
+      </div>
+      <div class="qz-after" style="margin-top:24px">
+        <button class="btn btn-ink" type="button" data-qz="enroll">Записаться на пробный урок</button>
+        <button class="link" type="button" data-qz="close">Закрыть</button>
+      </div>`;
+    $('.qz-q', qbody).focus({ preventScroll: true });
+  }
+
+  function showManual(msg, failed) {
+    qz.manual = msg;
+    qbody.innerHTML = `
+      <div><h2 class="qz-q" tabindex="-1">Осталось отправить результат</h2>
+      <p style="margin-top:8px;color:var(--muted)">${failed ? 'Не получилось отправить результат автоматически. ' : ''}Отправьте его Дарье любым удобным способом, и она пришлёт материалы для вашего уровня.</p></div>
+      <div class="dlg-msg" style="margin-top:18px" tabindex="0">${esc(msg)}</div>
+      <div class="dlg-actions" style="margin-top:18px">
+        <button class="btn btn-ink" type="button" data-qz="tg">Скопировать и открыть Telegram</button>
+        <a class="btn btn-ghost" href="${mailto('Результат теста уровня', msg)}">Написать на почту</a>
+        <button class="btn btn-ghost" type="button" data-qz="copy">Скопировать текст результата</button>
+      </div>
+      <div class="qz-after" style="margin-top:18px"><button class="link" type="button" data-qz="enroll">Записаться на пробный урок</button></div>`;
+    $('.qz-q', qbody).focus({ preventScroll: true });
+  }
+
+  qdlg.addEventListener('pointerdown', () => { lastPointer = performance.now(); });
+  qbody.addEventListener('change', e => {
+    if (e.target.name !== 'qa') return;
+    qz.picks[qz.i] = Number(e.target.value);
+    $('[data-qz="next"]', qbody).disabled = false;
+    // после тапа/клика сразу идём дальше; при выборе с клавиатуры ждём «Дальше»
+    if (performance.now() - lastPointer < 700) {
+      const at = qz.i;
+      setTimeout(() => { if (qz.i === at && qdlg.open) nextQuestion(); }, 260);
+    }
+  });
+  qdlg.addEventListener('click', async e => {
+    const b = e.target.closest('[data-qz]');
+    if (!b) return;
+    switch (b.dataset.qz) {
+      case 'next':  nextQuestion(); break;
+      case 'back':  if (qz.i > 0) { qz.i--; renderQuestion(); } break;
+      case 'close': qdlg.close(); break;
+      case 'retry': quizOpen(); break;
+      case 'enroll': qdlg.close(); $('#enroll').scrollIntoView({ behavior: 'smooth' }); break;
+      case 'copy':  toast(await copyText(qz.manual) ? 'Текст результата скопирован' : 'Не получилось скопировать, выделите текст вручную'); break;
+      case 'tg':
+        toast((await copyText(qz.manual)) ? 'Текст скопирован. Вставьте его в чат Telegram' : 'Откройте Telegram и отправьте текст результата');
+        window.open(TELEGRAM_URL, '_blank', 'noopener');
+        break;
+    }
+  });
+  qbody.addEventListener('submit', async e => {
+    if (e.target.id !== 'qzSend') return;
+    e.preventDefault();
+    const f = e.target, fd = new FormData(f);
+    const tg = tgNorm(fd.get('tg')), name = (fd.get('name') || '').toString().trim();
+    $$('.err', f).forEach(x => (x.textContent = ''));
+    let bad = false;
+    if (!TG_RE.test(tg)) { $('[data-qerr="tg"]', f).textContent = 'Укажите ваш Telegram, например @username (от 5 символов)'; bad = true; }
+    if (fd.get('consent') !== 'on') { $('[data-qerr="consent"]', f).textContent = 'Поставьте галочку, чтобы мы могли связаться с вами'; bad = true; }
+    if (bad) return;
+    if (fd.get('website')) return;
+
+    const r = qz.res, msg = testMessage(r, name, tg);
+    if (!NOTIFY_URL) return showManual(msg, false);
+    const btn = $('button[type="submit"]', f);
+    btn.disabled = true; btn.textContent = 'Отправляем…';
+    try {
+      await post('/test', { name, tg, level: r.level, score: r.total, total: r.count, breakdown: r.per, website: '' });
+      showSent(tg);
+    } catch { showManual(msg, true); }
+  });
 
   /* ── Шапка при прокрутке ── */
   const header = $('#siteHeader');
