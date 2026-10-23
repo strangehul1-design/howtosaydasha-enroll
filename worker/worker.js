@@ -14,6 +14,8 @@
  *   OWNER_CHAT_ID    секрет: числовой Telegram ID получателей уведомлений, несколько
  *                    через запятую (123456789,987654321). Каждый должен нажать Start в боте
  *   SETUP_KEY        секрет: ключ для настройки и диагностики (POST /setup, POST /status)
+ *   LOGIN_CLIENT_ID  необязательно: Client ID из BotFather → Login Widget, если он отличается
+ *                    от ID бота (по умолчанию берётся число из токена до двоеточия)
  *   ALLOWED_ORIGINS  адрес сайта, например https://strangehul1-design.github.io
  *   SITE_URL         адрес сайта вместе с папкой, откуда берутся PDF,
  *                    например https://strangehul1-design.github.io/howtosaydasha-enroll
@@ -104,6 +106,66 @@ const courseKeyboard = () => {
   return { inline_keyboard: rows };
 };
 
+/* Уведомление получателям: «@ник прошёл(а) тест на уровень …» с кнопками.
+   fileStatus: true — файл уже отправлен ученику, false — не удалось, null — ещё не отправлялся. */
+function notifyTest(env, student, level, counts, fileStatus) {
+  const score = counts.reduce((a, b) => a + b, 0);
+  const total = LEVELS.length * QUESTIONS_PER_LEVEL;
+  const perLevel = LEVELS.map((l, i) => `${l} ${counts[i]}/${QUESTIONS_PER_LEVEL}`).join(', ');
+  const status = fileStatus === true ? 'Файл с рекомендациями отправлен ученику ✅'
+    : fileStatus === false ? '⚠️ Файл ученику отправить не удалось, отправьте его вручную'
+    : 'Файл ещё не отправлен: нажмите кнопку ниже.';
+  return notifyOwners(env, [
+    `🧪 <b>${who(student)}</b> прошёл(а) тест на уровень <b>${level}</b> (${LEVEL_NAMES[level]})`,
+    '',
+    `Правильных ответов: ${score} из ${total}`,
+    `По уровням: ${perLevel}`,
+    status,
+  ].join('\n'), {
+    inline_keyboard: [
+      [{ text: fileStatus === true ? `📎 Отправить файл уровня ${level} ещё раз` : `📎 Отправить файл уровня ${level}`, callback_data: `f:${student.id}:${level}` }],
+      [{ text: '👋 Приветствие и вопрос о курсе', callback_data: `g:${student.id}` }],
+      [chatButton(student)],
+    ],
+  });
+}
+
+/* ── Вход через Telegram на сайте: проверка id_token ── */
+const JWKS_URL = 'https://oauth.telegram.org/.well-known/jwks.json';
+let jwksCache = { at: 0, keys: [] };
+const b64urlBytes = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(s.length / 4) * 4, '=')), c => c.charCodeAt(0));
+const b64urlJson = s => JSON.parse(new TextDecoder().decode(b64urlBytes(s)));
+
+async function signingKey(kid) {
+  let jwk = Date.now() - jwksCache.at < 3600e3 && jwksCache.keys.find(k => k.kid === kid);
+  if (!jwk) {
+    const res = await fetch(JWKS_URL);
+    if (!res.ok) throw new Error('jwks unavailable');
+    jwksCache = { at: Date.now(), keys: (await res.json()).keys || [] };
+    jwk = jwksCache.keys.find(k => k.kid === kid);
+  }
+  if (!jwk || jwk.kty !== 'RSA') throw new Error('unknown key');
+  return crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+}
+
+/* Проверяет подпись Telegram, издателя, получателя (наш бот), срок действия и nonce. */
+async function verifyIdToken(env, token, nonce) {
+  const parts = String(token || '').split('.');
+  if (parts.length !== 3) throw new Error('bad format');
+  const header = b64urlJson(parts[0]);
+  if (header.alg !== 'RS256') throw new Error('unsupported alg');
+  const ok = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', await signingKey(header.kid), b64urlBytes(parts[2]), new TextEncoder().encode(`${parts[0]}.${parts[1]}`));
+  if (!ok) throw new Error('bad signature');
+  const claims = b64urlJson(parts[1]);
+  const audience = String(env.LOGIN_CLIENT_ID || String(env.BOT_TOKEN).split(':')[0]);
+  if (claims.iss !== 'https://oauth.telegram.org') throw new Error('bad issuer');
+  if (String(claims.aud) !== audience) throw new Error('bad audience');
+  if (!claims.exp || claims.exp * 1000 < Date.now()) throw new Error('expired');
+  if (claims.nonce && claims.nonce !== nonce) throw new Error('bad nonce');
+  if (!Number.isSafeInteger(Number(claims.id))) throw new Error('no user id');
+  return claims;
+}
+
 /* ── Бот: /start из ссылки после теста ── */
 async function onStart(env, msg, payload) {
   const student = msg.from, chat = msg.chat.id;
@@ -119,7 +181,6 @@ async function onStart(env, msg, payload) {
   const counts = [...m[2]].map(Number);
   const score = counts.reduce((a, b) => a + b, 0);
   const total = LEVELS.length * QUESTIONS_PER_LEVEL;
-  const perLevel = LEVELS.map((l, i) => `${l} ${counts[i]}/${QUESTIONS_PER_LEVEL}`).join(', ');
 
   // файл уходит ученику вложением: Telegram сам скачивает его по ссылке
   const sent = await tg(env, 'sendDocument', {
@@ -128,19 +189,7 @@ async function onStart(env, msg, payload) {
   });
   if (!sent.ok) await say(env, chat, esc(TEXTS.fileFailed));
 
-  await notifyOwners(env, [
-    `🧪 <b>${who(student)}</b> прошёл(а) тест на уровень <b>${level}</b> (${LEVEL_NAMES[level]})`,
-    '',
-    `Правильных ответов: ${score} из ${total}`,
-    `По уровням: ${perLevel}`,
-    sent.ok ? 'Файл с рекомендациями отправлен ученику ✅' : '⚠️ Файл ученику отправить не удалось, отправьте его вручную',
-  ].join('\n'), {
-    inline_keyboard: [
-      [{ text: `📎 Отправить файл уровня ${level} ещё раз`, callback_data: `f:${student.id}:${level}` }],
-      [{ text: '👋 Приветствие и вопрос о курсе', callback_data: `g:${student.id}` }],
-      [chatButton(student)],
-    ],
-  });
+  await notifyTest(env, student, level, counts, sent.ok);
   return { handled: 'test', level, score, fileSent: sent.ok };
 }
 
@@ -190,14 +239,19 @@ async function onCallback(env, cb) {
   // кнопки под уведомлением доступны только получателям
   if (!isOwner(env, cb.from.id)) { await answer('Нет доступа'); return { handled: 'denied' }; }
 
+  // Telegram не даёт боту писать тому, кто не разрешил этого (не нажал Start и не дал право при входе на сайте)
+  const whyFailed = r => (/can't initiate|bot was blocked|chat not found|user is deactivated/i.test(JSON.stringify(r.data))
+    ? 'Ученик не разрешил боту писать. Нажмите «Открыть чат» и напишите ему сами.'
+    : 'Не получилось отправить, попробуйте ещё раз.');
+
   if (kind === 'f' && /^\d+$/.test(a) && LEVELS.includes(b)) {
     const sent = await tg(env, 'sendDocument', { chat_id: a, document: fileUrl(env, b), caption: TEXTS.fileCaption(b) });
-    await answer(sent.ok ? 'Файл отправлен ✅' : 'Не получилось отправить файл');
+    await answer(sent.ok ? 'Файл отправлен ✅' : whyFailed(sent));
     return { handled: 'file', fileSent: sent.ok };
   }
   if (kind === 'g' && /^\d+$/.test(a)) {
     const sent = await say(env, a, esc(TEXTS.greeting), { reply_markup: courseKeyboard() });
-    await answer(sent.ok ? 'Приветствие отправлено ✅' : 'Не получилось отправить');
+    await answer(sent.ok ? 'Приветствие отправлено ✅' : whyFailed(sent));
     return { handled: 'greeting', sent: sent.ok };
   }
   await answer('Неизвестная кнопка');
@@ -262,6 +316,7 @@ export default {
       return json({
         ok: true,
         bot: me.data.result?.username || null,
+        bot_id: me.data.result?.id ?? null,
         recipients: owners(env).length,
         secrets: { BOT_TOKEN: !!env.BOT_TOKEN, OWNER_CHAT_ID: !!env.OWNER_CHAT_ID },
         webhook: {
@@ -301,6 +356,29 @@ export default {
     }
     if (!body || typeof body !== 'object') return json({ ok: false, error: 'bad_json' }, 400, cors);
     if (body.website) return json({ ok: true }, 200, cors); // скрытое поле-ловушка для ботов
+
+    // результат теста: ученик вошёл через Telegram на сайте и разрешил боту писать ему
+    if (url.pathname === '/login') {
+      const m = /^t(A1|A2|B1|B2|C1)([0-4]{5})$/.exec(String(body.code ?? ''));
+      if (!m) return json({ ok: false, error: 'invalid' }, 400, cors);
+      let claims;
+      try {
+        claims = await verifyIdToken(env, body.id_token, body.nonce);
+      } catch (e) {
+        console.warn('login rejected:', e.message);
+        return json({ ok: false, error: 'auth' }, 401, cors);
+      }
+      const student = {
+        id: Number(claims.id),
+        first_name: oneLine(claims.given_name || claims.name, 64),
+        last_name: oneLine(claims.family_name, 64),
+        username: USERNAME_RE.test(String(claims.preferred_username || '')) ? claims.preferred_username : '',
+      };
+      const results = await notifyTest(env, student, m[1], [...m[2]].map(Number), null);
+      const delivered = results.filter(r => r.ok).length;
+      if (!delivered) return json({ ok: false, error: 'telegram' }, 502, cors);
+      return json({ ok: true, delivered }, 200, cors);
+    }
 
     if (url.pathname !== '/enroll') return json({ ok: false, error: 'not_found' }, 404, cors);
     const message = buildEnroll(body);

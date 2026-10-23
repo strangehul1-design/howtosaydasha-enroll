@@ -17,15 +17,19 @@ const SECRET = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`$
 
 let sent = [];
 let failing = new Set();
+let failDesc = 'fail';
+let jwks = { keys: [] };
+let jwksFetches = 0;
 globalThis.fetch = async (url, init) => {
+  if (String(url).endsWith('jwks.json')) { jwksFetches++; return new Response(JSON.stringify(jwks), { status: 200 }); }
   const method = String(url).split('/').pop();
   sent.push({ method, body: JSON.parse(init.body) });
-  if (failing.has(method)) return new Response('{"ok":false,"description":"fail"}', { status: 400 });
-  const result = method === 'getMe' ? { username: 'htsd_test_bot' } : method === 'getWebhookInfo' ? { url: 'x', pending_update_count: 0 } : {};
+  if (failing.has(method)) return new Response(JSON.stringify({ ok: false, description: failDesc }), { status: 403 });
+  const result = method === 'getMe' ? { username: 'htsd_test_bot', id: 4242 } : method === 'getWebhookInfo' ? { url: 'x', pending_update_count: 0 } : {};
   return new Response(JSON.stringify({ ok: true, result }), { status: 200 });
 };
 const calls = method => sent.filter(s => s.method === method);
-const reset = () => { sent = []; failing = new Set(); };
+const reset = () => { sent = []; failing = new Set(); failDesc = 'fail'; };
 
 const hook = (update, secret = SECRET, e = env) =>
   worker.fetch(new Request('https://worker.test/webhook', {
@@ -198,6 +202,59 @@ const origError = console.error; console.error = () => {};
 r = await site('/enroll', { details: 'x'.repeat(20) });
 console.error = origError;
 check('ошибка Telegram при заявке → 502', r.status === 502);
+
+
+// ───────── вход через Telegram на сайте (id_token, подпись RS256) ─────────
+const genKey = () => crypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['sign', 'verify']);
+const rsa = await genKey(), strangerRsa = await genKey();
+jwks = { keys: [{ ...(await crypto.subtle.exportKey('jwk', rsa.publicKey)), kid: 'oidc-1', alg: 'RS256' }] };
+const b64u = x => Buffer.from(x).toString('base64url');
+const jwt = async (claims, { key = rsa.privateKey, header = { alg: 'RS256', kid: 'oidc-1', typ: 'JWT' } } = {}) => {
+  const h = b64u(JSON.stringify(header)), p = b64u(JSON.stringify(claims));
+  return h + '.' + p + '.' + b64u(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(h + '.' + p)));
+};
+const now = Math.floor(Date.now() / 1000);
+const claims = (over = {}) => ({ iss: 'https://oauth.telegram.org', aud: 'TEST', sub: '777', iat: now, exp: now + 3600, id: 111, name: 'Анна Петрова', given_name: 'Анна', family_name: 'Петрова', preferred_username: 'anna_test', nonce: 'n-1', ...over });
+const login = async (token, over = {}) => site('/login', { id_token: token, nonce: 'n-1', code: 'tB244410', ...over });
+
+reset();
+r = await login(await jwt(claims()));
+j = await r.json();
+const ln = calls('sendMessage').filter(x => ['12345', '67890'].includes(String(x.body.chat_id)));
+check('вход через Telegram: ответ 200, уведомление дошло двоим', r.status === 200 && j.delivered === 2 && ln.length === 2, JSON.stringify(j));
+check('«@ник прошёл(а) тест на уровень B2», файл ещё не отправлен', ln[0]?.body.text.includes('<b>@anna_test</b> прошёл(а) тест на уровень <b>B2</b> (Выше среднего)') && ln[0].body.text.includes('13 из 20') && ln[0].body.text.includes('Файл ещё не отправлен'), ln[0]?.body.text);
+check('файл ученику автоматически НЕ уходит (только по кнопке)', calls('sendDocument').length === 0);
+check('кнопки: отправить файл, приветствие, открыть чат', buttons(ln[0]?.body).map(b => b.callback_data || b.url).join() === 'f:111:B2,g:111,https://t.me/anna_test', JSON.stringify(buttons(ln[0]?.body)));
+reset();
+await login(await jwt(claims({ preferred_username: undefined, given_name: 'Борис <b>' })));
+check('без юзернейма: упоминание по ID, имя экранировано', calls('sendMessage')[0]?.body.text.includes('<a href="tg://user?id=111">Борис &lt;b&gt;'), calls('sendMessage')[0]?.body.text);
+check('ключи Telegram запрашиваются один раз и кэшируются', jwksFetches === 1, String(jwksFetches));
+
+// подделки и ошибки
+const rejected = async (name, token, over = {}) => { reset(); const x = await login(token, over); check(name, x.status === 401 && sent.length === 0, String(x.status)); };
+await rejected('токен с чужой подписью отвергается', await jwt(claims(), { key: strangerRsa.privateKey }));
+await rejected('токен другого бота (чужой aud) отвергается', await jwt(claims({ aud: '999' })));
+await rejected('токен от другого издателя отвергается', await jwt(claims({ iss: 'https://evil.example' })));
+await rejected('просроченный токен отвергается', await jwt(claims({ exp: now - 10 })));
+await rejected('токен без id пользователя отвергается', await jwt(claims({ id: undefined })));
+await rejected('неверный nonce отвергается', await jwt(claims()), { nonce: 'другой' });
+await rejected('алгоритм HS256 отвергается', await jwt(claims(), { header: { alg: 'HS256', kid: 'oidc-1' } }));
+await rejected('неизвестный ключ (kid) отвергается', await jwt(claims(), { header: { alg: 'RS256', kid: 'нет-такого' } }));
+await rejected('мусор вместо токена отвергается', 'abc.def.ghi');
+await rejected('пустой токен отвергается', '');
+reset();
+check('неверный код результата → 400', (await login(await jwt(claims()), { code: 'tZ99999' })).status === 400 && sent.length === 0);
+check('вход с чужого сайта → 403', (await site('/login', { id_token: await jwt(claims()), code: 'tB244410' }, { origin: 'https://evil.example' })).status === 403);
+
+// кнопка «файл» для ученика, который не разрешил боту писать
+reset(); failing.add('sendDocument'); failDesc = "Forbidden: bot can't initiate conversation with a user";
+await hook(cbFrom('f:111:B2', dasha));
+check('кнопка «файл»: если ученик не разрешил писать, получатель видит понятную причину', calls('answerCallbackQuery')[0]?.body.text.includes('не разрешил боту писать'), calls('answerCallbackQuery')[0]?.body.text);
+reset();
+r = await worker.fetch(new Request('https://worker.test/status', { method: 'POST', headers: { 'X-Setup-Key': 'setup-key' } }), env);
+j = await r.json();
+check('/status: показывает ID бота и состояние вебхука', j.bot_id === 4242 && j.bot === 'htsd_test_bot' && j.webhook.pending === 0 && j.recipients === 2, JSON.stringify(j));
+check('/status: без ключа → 403', (await worker.fetch(new Request('https://worker.test/status', { method: 'POST' }), env)).status === 403);
 
 out(failed ? `\nПровалено проверок: ${failed}` : '\nВсе проверки пройдены');
 process.exit(failed ? 1 : 0);

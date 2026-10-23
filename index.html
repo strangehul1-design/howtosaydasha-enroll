@@ -725,6 +725,11 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
      присылает ему PDF с рекомендациями. Если оставить пустым, тест предложит
      отправить результат вручную (почтой или копированием). */
   const BOT_USERNAME  = 'howtosaydasha_bot';
+  /* TELEGRAM_CLIENT_ID — Client ID бота (BotFather → Login Widget, обычно совпадает с ID бота).
+     С ним после теста появляется кнопка «Войти через Telegram»: ученик подтверждает вход и
+     разрешает боту писать ему прямо на сайте, заходить в бота не нужно, а Даша отправляет
+     файл кнопкой в уведомлении. Если оставить пустым, покажется ссылка на бота (нужен Start). */
+  const TELEGRAM_CLIENT_ID = '8613049237';
   const CONTACT_EMAIL = 'HowToSayDasha@mail.ru';
   const TELEGRAM_URL  = 'https://t.me/howtosaydasha';
 
@@ -1063,8 +1068,9 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     qz.res = testResult = { level, total, count: QUIZ.length, per };
     qz.manual = testMessage(qz.res);
     // код для бота: уровень и число верных ответов по каждому уровню, например tB144400
-    const startCode = 't' + level + QL.map(l => per[l][0]).join('');
+    const startCode = qz.startCode = 't' + level + QL.map(l => per[l][0]).join('');
     setProgress(QUIZ.length); qcount.textContent = 'Готово';
+    if (TELEGRAM_CLIENT_ID) loadTelegramLogin().catch(() => {}); // грузим заранее, чтобы окно входа открывалось сразу по клику
 
     // подставляем уровень в конструктор
     const lv = $(`input[name="level"][value="${FORM_LEVEL[level]}"]`, form);
@@ -1080,13 +1086,20 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
       <ul class="bars" style="margin-top:18px" aria-label="Результат по уровням">${bars}</ul>
       <div class="qz-send" style="margin-top:22px">
         <div><h3>Получите рекомендации для уровня ${level}</h3>
-        <p style="margin-top:6px">${BOT_USERNAME
-          ? 'Откройте нашего бота в Telegram и нажмите Start: файл с персональными рекомендациями для вашего уровня придёт вам сразу. Дарья увидит ваш результат и напишет вам.'
-          : 'Отправьте результат Дарье, и она пришлёт рекомендации для вашего уровня.'}</p></div>
-        ${BOT_USERNAME ? `
+        <p style="margin-top:6px">${TELEGRAM_CLIENT_ID
+          ? 'Нажмите кнопку и подтвердите вход в Telegram во всплывающем окне. Дарья получит ваш результат и пришлёт файл с персональными рекомендациями. Заходить в бота не нужно.'
+          : BOT_USERNAME
+            ? 'Откройте нашего бота в Telegram и нажмите Start: файл с персональными рекомендациями для вашего уровня придёт вам сразу. Дарья увидит ваш результат и напишет вам.'
+            : 'Отправьте результат Дарье, и она пришлёт рекомендации для вашего уровня.'}</p></div>
+        ${TELEGRAM_CLIENT_ID ? `
+        <button class="btn btn-ink btn-block" type="button" data-qz="tglogin">Войти через Telegram и получить рекомендации</button>
+        <p class="err" id="qzLoginErr" role="alert"></p>
+        <p class="hint" style="margin:0">Входя через Telegram, вы передаёте Дарье ваш Telegram-аккаунт и результат теста, чтобы она могла с вами связаться, и разрешаете боту школы писать вам.</p>
+        ${BOT_USERNAME ? `<p class="hint" style="margin:0">Не открывается окно входа? <a class="link" href="https://t.me/${BOT_USERNAME}?start=${startCode}" target="_blank" rel="noopener">Откройте бота и нажмите Start</a>.</p>` : ''}`
+        : BOT_USERNAME ? `
         <a class="btn btn-ink btn-block" href="https://t.me/${BOT_USERNAME}?start=${startCode}" target="_blank" rel="noopener">Получить рекомендации в Telegram</a>
         <p class="hint" style="margin:0">Нажимая Start, вы соглашаетесь на обработку вашего Telegram-аккаунта и результата теста, чтобы Дарья могла с вами связаться.</p>` : ''}
-        <p class="hint" style="margin:0">${BOT_USERNAME ? 'Нет Telegram? ' : ''}<a class="link" href="${mailto('Результат теста уровня', qz.manual)}">Отправить результат на почту</a> или <button class="link" type="button" data-qz="copy">скопировать результат</button>.</p>
+        <p class="hint" style="margin:0">${TELEGRAM_CLIENT_ID || BOT_USERNAME ? 'Нет Telegram? ' : ''}<a class="link" href="${mailto('Результат теста уровня', qz.manual)}">Отправить результат на почту</a> или <button class="link" type="button" data-qz="copy">скопировать результат</button>.</p>
       </div>
       <div class="qz-after" style="margin-top:20px">
         <button class="btn btn-ghost" type="button" data-qz="enroll">Записаться на пробный урок</button>
@@ -1103,6 +1116,61 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     `Правильных ответов: ${r.total} из ${r.count}`,
     `По уровням: ${QL.map(l => `${l} ${r.per[l][0]}/${r.per[l][1]}`).join(', ')}`,
   ].join('\n');
+
+  /* ── Вход через Telegram: ученик подтверждает вход и разрешает боту писать ему ── */
+  let tgLoginScript = null;
+  function loadTelegramLogin() {
+    if (window.Telegram && window.Telegram.Login) return Promise.resolve();
+    return tgLoginScript || (tgLoginScript = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://oauth.telegram.org/js/telegram-login.js';
+      s.async = true;
+      s.onload = resolve;
+      s.onerror = () => { tgLoginScript = null; reject(new Error('load')); };
+      document.head.appendChild(s);
+    }));
+  }
+
+  function startTelegramLogin(btn) {
+    const err = $('#qzLoginErr', qbody);
+    err.textContent = '';
+    if (!(window.Telegram && window.Telegram.Login)) {
+      err.textContent = 'Вход через Telegram ещё загружается, нажмите кнопку ещё раз. Если не получится, откройте бота по ссылке ниже.';
+      loadTelegramLogin().catch(() => {});
+      return;
+    }
+    const nonce = Array.from(crypto.getRandomValues(new Uint8Array(12)), x => x.toString(16).padStart(2, '0')).join('');
+    window.Telegram.Login.auth({ client_id: Number(TELEGRAM_CLIENT_ID), scope: ['profile', 'write'], nonce, lang: 'ru' }, async result => {
+      if (!result || result.error) {
+        err.textContent = result && result.error === 'popup_closed'
+          ? 'Окно входа закрыто. Нажмите кнопку ещё раз.'
+          : 'Не получилось войти через Telegram. Попробуйте ещё раз или откройте бота по ссылке ниже.';
+        return;
+      }
+      const label = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Отправляем…';
+      try {
+        await post('/login', { id_token: result.id_token, nonce, code: qz.startCode });
+        showLoginDone();
+      } catch {
+        btn.disabled = false; btn.textContent = label;
+        err.textContent = 'Не получилось передать результат Дарье. Попробуйте ещё раз или откройте бота по ссылке ниже.';
+      }
+    });
+  }
+
+  function showLoginDone() {
+    qbody.innerHTML = `
+      <div class="qz-res-head">
+        <div class="lv-badge" style="--c:var(--mint)" aria-hidden="true">✓</div>
+        <div><h2 class="qz-q" tabindex="-1">Результат отправлен</h2><p>Дарья получила ваш результат и пришлёт файл с рекомендациями для уровня ${qz.res.level} в Telegram от бота школы.</p></div>
+      </div>
+      <div class="qz-after" style="margin-top:24px">
+        <button class="btn btn-ink" type="button" data-qz="enroll">Записаться на пробный урок</button>
+        <button class="link" type="button" data-qz="close">Закрыть</button>
+      </div>`;
+    $('.qz-q', qbody).focus({ preventScroll: true });
+  }
 
   qdlg.addEventListener('pointerdown', () => { lastPointer = performance.now(); });
   qbody.addEventListener('change', e => {
@@ -1125,6 +1193,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
       case 'retry': quizOpen(); break;
       case 'enroll': qdlg.close(); $('#enroll').scrollIntoView({ behavior: 'smooth' }); break;
       case 'copy':  toast(await copyText(qz.manual) ? 'Текст результата скопирован' : 'Не получилось скопировать, выделите текст вручную'); break;
+      case 'tglogin': startTelegramLogin(b); break;   // вызывается сразу по клику, иначе браузер заблокирует окно входа
     }
   });
 
