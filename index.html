@@ -639,7 +639,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
       <div class="sec-head"><h2>Частые вопросы</h2></div>
       <div class="faq-list">
         <details><summary>Какой уровень нужен, чтобы начать?</summary><p>Любой: от нуля до продвинутого. Перед началом занятий бесплатно проверим уровень или вы можете пройти тест на сайте.</p></details>
-        <details><summary>Сколько длится один урок?</summary><p>Для малышей 40 минут, чтобы удержать внимание. Для школьников и взрослых 45–60 минут. Групповые занятия длятся 90 минут.</p></details>
+        <details><summary>Сколько длится один урок?</summary><p>Для малышей 40 минут, чтобы удержать внимание. Для школьников и взрослых 45–60 минут. Групповые занятия длятся 90 минут, занятия проходят 2 раза в неделю.</p></details>
         <details><summary>Когда будут первые результаты?</summary><p>При регулярных занятиях 2–3 раза в неделю первые результаты заметны через 1–2 месяца. До среднего уровня обычно нужно 6–12 месяцев.</p></details>
         <details><summary>Можно ли перенести занятие?</summary><p>Да, предупредите преподавателя минимум за 12 часов, и мы найдём другое время. Занятия, пропущенные без предупреждения, не компенсируются.</p></details>
         <details><summary>Как оплачивать занятия?</summary><p>Помесячно или пакетами занятий: картой, переводом на карту или через платёжные системы. Первое пробное занятие бесплатно.</p></details>
@@ -730,8 +730,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
                   desc: 'Дети 4–18 лет. Песни, игры и творчество. Помогаем с домашкой и работаем по запросу родителей.' },
     individual: { title: 'Индивидуальные',      ico: '🎯', c: 'var(--sky)',   tint: '#D9ECF8', lessons: 10, min: 45, price: 40000,
                   desc: 'Персональная программа под ваши цели и уровень, расписание — как удобно вам.' },
-    group:      { title: 'Групповые занятия',   ico: '👥', c: 'var(--mint)',  tint: '#D4F1E8', lessons: 20, min: 90, price: 30000,
-                  offer: { price: 25000, note: 'при оплате в первые 24 часа' },
+    group:      { title: 'Групповые занятия',   ico: '👥', c: 'var(--mint)',  tint: '#D4F1E8', price: 25000,
+                  fmt: '2 месяца, 2 занятия в неделю по 90 минут', unit: 'за 2 месяца',
                   desc: 'Группы по уровням. Бонусные уроки разговорного клуба.' },
     business:   { title: 'Бизнес-английский',   ico: '💼', c: 'var(--coral)', tint: '#FADDD3', lessons: 10, min: 60, price: 45000,
                   desc: 'Деловая лексика, презентации и переговоры для работы в международной среде.' },
@@ -788,7 +788,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const rub = n => n.toLocaleString('ru-RU') + ' ₽';
-  const fmtOf = p => (p.lessons ? `${p.lessons} уроков по ${p.min} минут` : p.fmt);
+  const fmtOf = p => p.fmt || `${p.lessons} уроков по ${p.min} минут`;
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const tgNorm = v => String(v || '').trim().replace(/^(?:https?:\/\/)?t\.me\//i, '').replace(/^@/, '');
   const TG_RE = /^[A-Za-z][A-Za-z0-9_]{4,31}$/;
@@ -822,8 +822,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   /* ── Прайс-лист ── */
   function renderPriceList() {
     $('#priceList').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) => {
-      const price = p.lessons
-        ? `<div class="pb-price"><strong>${rub(p.price)}</strong><small>${rub(Math.round(p.price / p.lessons))} за урок</small>${p.offer ? `<span class="deal">${rub(p.offer.price)} ${p.offer.note}</span>` : ''}</div>`
+      const price = p.price
+        ? `<div class="pb-price"><strong>${rub(p.price)}</strong><small>${p.lessons ? `${rub(Math.round(p.price / p.lessons))} за урок` : p.unit}</small>${p.offer ? `<span class="deal">${rub(p.offer.price)} ${p.offer.note}</span>` : ''}</div>`
         : '<div class="pb-price"><strong class="soft">Назовём при записи</strong><small>Старт 24.11</small></div>';
       return `
       <li class="pb-row" style="--c:${p.c}">
@@ -883,8 +883,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   function quote(s) {
     if (!s.program) return { big: '—', sub: 'Выберите программу, и мы покажем цену' };
     const p = PROGRAMS[s.program];
-    if (!p.lessons) return { big: 'Назовём при записи', sub: 'SpeakingClub стартует 24.11' };
-    let sub = `${fmtOf(p)}, ${rub(Math.round(p.price / p.lessons))} за урок`;
+    if (!p.price) return { big: 'Назовём при записи', sub: 'SpeakingClub стартует 24.11' };
+    let sub = p.lessons ? `${fmtOf(p)}, ${rub(Math.round(p.price / p.lessons))} за урок` : `${fmtOf(p)}`;
     if (p.offer) sub += `\nАкция: ${rub(p.offer.price)} ${p.offer.note}`;
     return { big: rub(p.price), sub };
   }
@@ -951,7 +951,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     const p = PROGRAMS[s.program], q = quote(s);
     const contact = s.ctype === 'tg' ? '@' + tgNorm(s.contact) : s.contact;
     const L = [`Имя: ${s.name}`, `Связь: ${CTYPES[s.ctype].name}, ${contact}`, ''];
-    L.push(`Программа: ${p.title}${p.lessons ? ` (${fmtOf(p)})` : ' (старт 24.11)'}`);
+    L.push(`Программа: ${p.title}${p.price ? ` (${fmtOf(p)})` : ' (старт 24.11)'}`);
     if (s.program === 'kids') L.push(`Возраст ребёнка: ${s.age}`);
     L.push(`Уровень: ${LEVELS[s.level] || 'не указан'}`);
     if (testResult) L.push(`Результат теста: ${testResult.level}, ${testResult.total} из ${testResult.count}`);
@@ -959,7 +959,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     if (s.days.length) L.push(`Дни: ${s.days.join(', ')}`);
     if (s.times.length) L.push(`Время: ${s.times.join('; ')}`);
     if (s.tz) L.push(`Город / часовой пояс: ${s.tz}`);
-    if (p.lessons) L.push(`Стоимость: ${q.big} за пакет${p.offer ? ` (${rub(p.offer.price)} ${p.offer.note})` : ''}`);
+    if (p.price) L.push(`Стоимость: ${q.big} ${p.unit || 'за пакет'}${p.offer ? ` (${rub(p.offer.price)} ${p.offer.note})` : ''}`);
     if (s.note) L.push('', `Комментарий: ${s.note}`);
     return L;
   }
