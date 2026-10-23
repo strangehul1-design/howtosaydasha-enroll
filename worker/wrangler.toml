@@ -1,0 +1,9 @@
+name = "htsd-notify"
+main = "worker.js"
+compatibility_date = "2025-10-01"
+
+# Секреты BOT_TOKEN и OWNER_CHAT_ID сюда не пишутся: они задаются командой
+# `npx wrangler secret put <ИМЯ>` и хранятся только в Cloudflare.
+[vars]
+ALLOWED_ORIGINS = "https://strangehul1-design.github.io"
+SITE_URL = "https://strangehul1-design.github.io/howtosaydasha-enroll"

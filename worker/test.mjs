@@ -78,6 +78,11 @@ check('ловушка для ботов: 200, но в Telegram ничего не
 r = await worker.fetch(new Request('https://worker.test/test', { method: 'POST', headers: { Origin: ORIGIN }, body: JSON.stringify(testBody) }), { ...env, BOT_TOKEN: '' });
 check('нет токена → 500 not_configured', r.status === 500);
 
+// 3б. несколько получателей
+sent = [];
+r = await worker.fetch(new Request('https://worker.test/test', { method: 'POST', headers: { Origin: ORIGIN }, body: JSON.stringify(testBody) }), { ...env, OWNER_CHAT_ID: '12345, 67890' });
+check('два получателя: уведомление уходит обоим', r.status === 200 && sent.map(s => s.body.chat_id).join() === '12345,67890', sent.map(s => s.body.chat_id).join());
+
 // 4. CORS и ошибка Telegram
 r = await call('/test', null, { method: 'OPTIONS' });
 check('CORS preflight для своего сайта', r.status === 204 && r.headers.get('Access-Control-Allow-Origin') === ORIGIN);

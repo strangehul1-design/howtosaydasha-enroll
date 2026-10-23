@@ -7,7 +7,9 @@
  *
  * Настройки (Cloudflare → Worker → Settings → Variables and Secrets):
  *   BOT_TOKEN        секрет: токен бота от @BotFather
- *   OWNER_CHAT_ID    ваш числовой Telegram ID (куда слать уведомления)
+ *   OWNER_CHAT_ID    числовой Telegram ID, куда слать уведомления; если получателей
+ *                    несколько, перечислите ID через запятую (123456789,987654321).
+ *                    Каждый получатель должен нажать Start в боте
  *   ALLOWED_ORIGINS  адрес сайта, например https://strangehul1-design.github.io
  *                    (несколько адресов через запятую)
  *   SITE_URL         адрес сайта вместе с папкой, откуда берутся файлы по уровням,
@@ -127,15 +129,18 @@ export default {
     else return json({ ok: false, error: 'not_found' }, 404, cors);
     if (!message) return json({ ok: false, error: 'invalid' }, 400, cors);
 
-    const res = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: env.OWNER_CHAT_ID, parse_mode: 'HTML', disable_web_page_preview: true, ...message }),
-    });
-    if (!res.ok) {
-      console.error('Telegram error', res.status, await res.text());
-      return json({ ok: false, error: 'telegram' }, 502, cors);
-    }
-    return json({ ok: true }, 200, cors);
+    // Получателей может быть несколько: ID через запятую. Достаточно, чтобы дошло хотя бы одному.
+    const recipients = String(env.OWNER_CHAT_ID).split(',').map(s => s.trim()).filter(Boolean);
+    const delivered = await Promise.all(recipients.map(async chatId => {
+      const res = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, parse_mode: 'HTML', disable_web_page_preview: true, ...message }),
+      });
+      if (!res.ok) console.error('Telegram error', chatId, res.status, await res.text());
+      return res.ok;
+    }));
+    if (!delivered.some(Boolean)) return json({ ok: false, error: 'telegram' }, 502, cors);
+    return json({ ok: true, delivered: delivered.filter(Boolean).length }, 200, cors);
   },
 };

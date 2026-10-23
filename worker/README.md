@@ -26,7 +26,7 @@
    | Имя | Тип | Значение |
    |---|---|---|
    | `BOT_TOKEN` | **Secret** | токен бота из @BotFather |
-   | `OWNER_CHAT_ID` | Text | число из шага 2 |
+   | `OWNER_CHAT_ID` | Text | число из шага 2 (несколько получателей: ID через запятую, `111,222`) |
    | `ALLOWED_ORIGINS` | Text | `https://strangehul1-design.github.io` |
    | `SITE_URL` | Text | `https://strangehul1-design.github.io/howtosaydasha-enroll` |
 
@@ -36,6 +36,16 @@
 7. **Положите файлы по уровням** в папку `materials/` (см. `materials/README.md`).
 
 > **Токен никогда не вставляйте** в `index.html`, README или другие файлы репозитория и не присылайте в чаты. Он нужен только в настройках воркера (шаг 4). Если токен всё же попал куда-то лишний, в @BotFather выполните `/revoke` и подставьте новый.
+
+## Как добавить ещё одного получателя
+
+Новый человек нажимает **Start** в боте и узнаёт свой ID у @userinfobot. Затем в папке `worker` выполняется команда, куда вводятся все ID через запятую:
+
+```bash
+npx wrangler@4 secret put OWNER_CHAT_ID
+```
+
+На Windows в PowerShell вместо `npx` пишите `npx.cmd`, если появляется ошибка про выполнение сценариев. Перезапускать воркер не нужно.
 
 ## Защита от спама
 
