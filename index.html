@@ -501,7 +501,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     <div class="wrap quiz-grid">
       <div>
         <h2 id="testTitle">Узнайте свой уровень английского</h2>
-        <p>20 вопросов, около 7 минут. Результат покажем сразу, а Дарья пришлёт в Telegram персональные рекомендации для вашего уровня.</p>
+        <p>20 вопросов, около 7 минут. Результат покажем сразу, а бот в Telegram пришлёт файл с персональными рекомендациями для вашего уровня.</p>
         <button class="btn btn-ink" type="button" data-open-quiz>Пройти тест</button>
       </div>
       <ul class="ladder" aria-label="Уровни английского от A1 до C1">
@@ -721,6 +721,10 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
      Пока пусто, после нажатия на кнопку заявка собирается в текст, который
      можно отправить в Telegram или на почту вручную. */
   const NOTIFY_URL    = 'https://htsd-notify.asiyatort.workers.dev';
+  /* BOT_USERNAME — имя бота без @. После теста ученик переходит в бота, и тот сам
+     присылает ему PDF с рекомендациями. Если оставить пустым, тест предложит
+     отправить результат вручную (почтой или копированием). */
+  const BOT_USERNAME  = 'howtosaydasha_bot';
   const CONTACT_EMAIL = 'HowToSayDasha@mail.ru';
   const TELEGRAM_URL  = 'https://t.me/howtosaydasha';
 
@@ -1057,6 +1061,9 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   function showResult() {
     const { per, total } = score(), level = levelFor(total), info = QINFO[level];
     qz.res = testResult = { level, total, count: QUIZ.length, per };
+    qz.manual = testMessage(qz.res);
+    // код для бота: уровень и число верных ответов по каждому уровню, например tB144400
+    const startCode = 't' + level + QL.map(l => per[l][0]).join('');
     setProgress(QUIZ.length); qcount.textContent = 'Готово';
 
     // подставляем уровень в конструктор
@@ -1071,19 +1078,16 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
       </div>
       <p style="margin-top:18px">${info.text}</p>
       <ul class="bars" style="margin-top:18px" aria-label="Результат по уровням">${bars}</ul>
-      <form class="qz-send" id="qzSend" novalidate style="margin-top:22px">
+      <div class="qz-send" style="margin-top:22px">
         <div><h3>Получите рекомендации для уровня ${level}</h3>
-        <p style="margin-top:6px">Оставьте Telegram: Дарья получит ваш результат и напишет вам с файлом, подобранным под ваш уровень.</p></div>
-        <div class="fields-2">
-          <div class="field"><label for="qzName">Имя <span style="font-weight:400;color:var(--muted)">— по желанию</span></label><input class="input" id="qzName" name="name" autocomplete="given-name" placeholder="Как к вам обращаться"></div>
-          <div class="field"><label for="qzTg">Ваш Telegram</label><input class="input" id="qzTg" name="tg" placeholder="@username" autocomplete="off"></div>
-        </div>
-        <p class="err" data-qerr="tg" role="alert"></p>
-        <div><label class="consent"><input type="checkbox" name="consent"><span>Согласен(на) на обработку персональных данных, чтобы со мной связались</span></label>
-        <p class="err" data-qerr="consent" role="alert"></p></div>
-        <div class="trap" aria-hidden="true"><label>Не заполняйте это поле<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-        <button class="btn btn-ink btn-block" type="submit">Отправить результат Дарье</button>
-      </form>
+        <p style="margin-top:6px">${BOT_USERNAME
+          ? 'Откройте нашего бота в Telegram и нажмите Start: файл с персональными рекомендациями для вашего уровня придёт вам сразу. Дарья увидит ваш результат и напишет вам.'
+          : 'Отправьте результат Дарье, и она пришлёт рекомендации для вашего уровня.'}</p></div>
+        ${BOT_USERNAME ? `
+        <a class="btn btn-ink btn-block" href="https://t.me/${BOT_USERNAME}?start=${startCode}" target="_blank" rel="noopener">Получить рекомендации в Telegram</a>
+        <p class="hint" style="margin:0">Нажимая Start, вы соглашаетесь на обработку вашего Telegram-аккаунта и результата теста, чтобы Дарья могла с вами связаться.</p>` : ''}
+        <p class="hint" style="margin:0">${BOT_USERNAME ? 'Нет Telegram? ' : ''}<a class="link" href="${mailto('Результат теста уровня', qz.manual)}">Отправить результат на почту</a> или <button class="link" type="button" data-qz="copy">скопировать результат</button>.</p>
+      </div>
       <div class="qz-after" style="margin-top:20px">
         <button class="btn btn-ghost" type="button" data-qz="enroll">Записаться на пробный урок</button>
         <button class="link" type="button" data-qz="retry">Пройти заново</button>
@@ -1092,42 +1096,13 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     qdlg.scrollTo({ top: 0 });
   }
 
-  const testMessage = (r, name, tg) => [
+  // текст результата для ручной отправки (почта или копирование)
+  const testMessage = r => [
     'Результат теста уровня — HowToSayDasha', '',
-    name ? `Имя: ${name}` : '',
-    `Telegram: @${tg}`,
     `Уровень: ${r.level} (${QINFO[r.level].name})`,
     `Правильных ответов: ${r.total} из ${r.count}`,
     `По уровням: ${QL.map(l => `${l} ${r.per[l][0]}/${r.per[l][1]}`).join(', ')}`,
-  ].filter((l, i) => l || i === 1).join('\n');
-
-  function showSent(tg) {
-    qbody.innerHTML = `
-      <div class="qz-res-head">
-        <div class="lv-badge" style="--c:var(--mint)" aria-hidden="true">✓</div>
-        <div><h2 class="qz-q" tabindex="-1">Результат отправлен</h2><p>Дарья получила ваш результат и напишет вам в Telegram (@${esc(tg)}) с рекомендациями для уровня ${qz.res.level}.</p></div>
-      </div>
-      <div class="qz-after" style="margin-top:24px">
-        <button class="btn btn-ink" type="button" data-qz="enroll">Записаться на пробный урок</button>
-        <button class="link" type="button" data-qz="close">Закрыть</button>
-      </div>`;
-    $('.qz-q', qbody).focus({ preventScroll: true });
-  }
-
-  function showManual(msg, failed) {
-    qz.manual = msg;
-    qbody.innerHTML = `
-      <div><h2 class="qz-q" tabindex="-1">Осталось отправить результат</h2>
-      <p style="margin-top:8px;color:var(--muted)">${failed ? 'Не получилось отправить результат автоматически. ' : ''}Отправьте его Дарье любым удобным способом, и она пришлёт рекомендации для вашего уровня.</p></div>
-      <div class="dlg-msg" style="margin-top:18px" tabindex="0">${esc(msg)}</div>
-      <div class="dlg-actions" style="margin-top:18px">
-        <button class="btn btn-ink" type="button" data-qz="tg">Скопировать и открыть Telegram</button>
-        <a class="btn btn-ghost" href="${mailto('Результат теста уровня', msg)}">Написать на почту</a>
-        <button class="btn btn-ghost" type="button" data-qz="copy">Скопировать текст результата</button>
-      </div>
-      <div class="qz-after" style="margin-top:18px"><button class="link" type="button" data-qz="enroll">Записаться на пробный урок</button></div>`;
-    $('.qz-q', qbody).focus({ preventScroll: true });
-  }
+  ].join('\n');
 
   qdlg.addEventListener('pointerdown', () => { lastPointer = performance.now(); });
   qbody.addEventListener('change', e => {
@@ -1150,32 +1125,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
       case 'retry': quizOpen(); break;
       case 'enroll': qdlg.close(); $('#enroll').scrollIntoView({ behavior: 'smooth' }); break;
       case 'copy':  toast(await copyText(qz.manual) ? 'Текст результата скопирован' : 'Не получилось скопировать, выделите текст вручную'); break;
-      case 'tg':
-        toast((await copyText(qz.manual)) ? 'Текст скопирован. Вставьте его в чат Telegram' : 'Откройте Telegram и отправьте текст результата');
-        window.open(TELEGRAM_URL, '_blank', 'noopener');
-        break;
     }
-  });
-  qbody.addEventListener('submit', async e => {
-    if (e.target.id !== 'qzSend') return;
-    e.preventDefault();
-    const f = e.target, fd = new FormData(f);
-    const tg = tgNorm(fd.get('tg')), name = (fd.get('name') || '').toString().trim();
-    $$('.err', f).forEach(x => (x.textContent = ''));
-    let bad = false;
-    if (!TG_RE.test(tg)) { $('[data-qerr="tg"]', f).textContent = 'Укажите ваш Telegram, например @username (от 5 символов)'; bad = true; }
-    if (fd.get('consent') !== 'on') { $('[data-qerr="consent"]', f).textContent = 'Поставьте галочку, чтобы мы могли связаться с вами'; bad = true; }
-    if (bad) return;
-    if (fd.get('website')) return;
-
-    const r = qz.res, msg = testMessage(r, name, tg);
-    if (!NOTIFY_URL) return showManual(msg, false);
-    const btn = $('button[type="submit"]', f);
-    btn.disabled = true; btn.textContent = 'Отправляем…';
-    try {
-      await post('/test', { name, tg, level: r.level, score: r.total, total: r.count, breakdown: r.per, website: '' });
-      showSent(tg);
-    } catch { showManual(msg, true); }
   });
 
   /* ── Шапка при прокрутке ── */
