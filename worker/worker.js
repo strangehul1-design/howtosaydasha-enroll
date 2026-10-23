@@ -21,12 +21,23 @@ const LEVEL_NAMES = { A1: 'Начальный', A2: 'Элементарный', 
 const USERNAME_RE = /^[A-Za-z][A-Za-z0-9_]{4,31}$/;
 const DEFAULT_SITE_URL = 'https://strangehul1-design.github.io/howtosaydasha-enroll';
 
+/* Файл с рекомендациями для каждого уровня (лежат в папке materials/ репозитория).
+   Для A1 и A2, как и для C1, файл общий. Чтобы заменить файл, положите новый
+   с тем же именем или поправьте имя здесь. */
+const LEVEL_FILES = {
+  A1: 'howtosaydasha_Rekomendacii_A1-A2.pdf',
+  A2: 'howtosaydasha_Rekomendacii_A1-A2.pdf',
+  B1: 'howtosaydasha_Rekomendacii_B1.pdf',
+  B2: 'howtosaydasha_Rekomendacii_B2.pdf',
+  C1: 'howtosaydasha_Rekomendacii_C1-C2.pdf',
+};
+
 /* Тексты, которые подставятся в личное сообщение ученику. Перед отправкой
    вы увидите их в поле ввода и сможете поправить. */
 const hello = name => (name ? `Здравствуйте, ${name}!` : 'Здравствуйте!');
 const TEXTS = {
   file: (name, level, link) =>
-    `${hello(name)} Это Дарья из HowToSayDasha. Вы прошли тест: у вас уровень ${level}. Подготовила для вас файл с материалами под этот уровень: ${link}`,
+    `${hello(name)} Это Дарья из HowToSayDasha. Вы прошли тест: у вас уровень ${level}. Подготовила для вас файл с рекомендациями под этот уровень: ${link}`,
   greeting: name =>
     `${hello(name)} Это Дарья из HowToSayDasha. Спасибо, что прошли тест! На какой курс вы хотели бы записаться: детские занятия, индивидуальные, групповые, бизнес-английский или SpeakingClub?`,
 };
@@ -59,7 +70,7 @@ function buildTest(b, env) {
   }).join(', ');
 
   const site = String(env.SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, '');
-  const fileLink = `${site}/materials/${level}.pdf`;
+  const fileLink = `${site}/materials/${LEVEL_FILES[level]}`;
   const chat = `https://t.me/${tg}`;
 
   const lines = [

@@ -501,7 +501,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     <div class="wrap quiz-grid">
       <div>
         <h2 id="testTitle">Узнайте свой уровень английского</h2>
-        <p>20 вопросов, около 7 минут. Результат покажем сразу, а Дарья пришлёт в Telegram материалы для вашего уровня.</p>
+        <p>20 вопросов, около 7 минут. Результат покажем сразу, а Дарья пришлёт в Telegram персональные рекомендации для вашего уровня.</p>
         <button class="btn btn-ink" type="button" data-open-quiz>Пройти тест</button>
       </div>
       <ul class="ladder" aria-label="Уровни английского от A1 до C1">
@@ -1072,7 +1072,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
       <p style="margin-top:18px">${info.text}</p>
       <ul class="bars" style="margin-top:18px" aria-label="Результат по уровням">${bars}</ul>
       <form class="qz-send" id="qzSend" novalidate style="margin-top:22px">
-        <div><h3>Получите материалы для уровня ${level}</h3>
+        <div><h3>Получите рекомендации для уровня ${level}</h3>
         <p style="margin-top:6px">Оставьте Telegram: Дарья получит ваш результат и напишет вам с файлом, подобранным под ваш уровень.</p></div>
         <div class="fields-2">
           <div class="field"><label for="qzName">Имя <span style="font-weight:400;color:var(--muted)">— по желанию</span></label><input class="input" id="qzName" name="name" autocomplete="given-name" placeholder="Как к вам обращаться"></div>
@@ -1105,7 +1105,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     qbody.innerHTML = `
       <div class="qz-res-head">
         <div class="lv-badge" style="--c:var(--mint)" aria-hidden="true">✓</div>
-        <div><h2 class="qz-q" tabindex="-1">Результат отправлен</h2><p>Дарья получила ваш результат и напишет вам в Telegram (@${esc(tg)}) с материалами для уровня ${qz.res.level}.</p></div>
+        <div><h2 class="qz-q" tabindex="-1">Результат отправлен</h2><p>Дарья получила ваш результат и напишет вам в Telegram (@${esc(tg)}) с рекомендациями для уровня ${qz.res.level}.</p></div>
       </div>
       <div class="qz-after" style="margin-top:24px">
         <button class="btn btn-ink" type="button" data-qz="enroll">Записаться на пробный урок</button>
@@ -1118,7 +1118,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     qz.manual = msg;
     qbody.innerHTML = `
       <div><h2 class="qz-q" tabindex="-1">Осталось отправить результат</h2>
-      <p style="margin-top:8px;color:var(--muted)">${failed ? 'Не получилось отправить результат автоматически. ' : ''}Отправьте его Дарье любым удобным способом, и она пришлёт материалы для вашего уровня.</p></div>
+      <p style="margin-top:8px;color:var(--muted)">${failed ? 'Не получилось отправить результат автоматически. ' : ''}Отправьте его Дарье любым удобным способом, и она пришлёт рекомендации для вашего уровня.</p></div>
       <div class="dlg-msg" style="margin-top:18px" tabindex="0">${esc(msg)}</div>
       <div class="dlg-actions" style="margin-top:18px">
         <button class="btn btn-ink" type="button" data-qz="tg">Скопировать и открыть Telegram</button>

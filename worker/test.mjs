@@ -48,7 +48,19 @@ check('тест: ровно две кнопки', kb.length === 2, kb.length);
 const fileUrl = new URL(kb[0].url);
 check('кнопка 1: открывает личку ученика', fileUrl.origin + fileUrl.pathname === 'https://t.me/anna_test');
 const fileText = fileUrl.searchParams.get('text');
-check('кнопка 1: в тексте ссылка на файл уровня', fileText.includes('https://strangehul1-design.github.io/howtosaydasha-enroll/materials/B1.pdf') && fileText.includes('Анна'), fileText);
+check('кнопка 1: в тексте ссылка на файл уровня', fileText.includes('https://strangehul1-design.github.io/howtosaydasha-enroll/materials/howtosaydasha_Rekomendacii_B1.pdf') && fileText.includes('Анна'), fileText);
+
+// файл подбирается по уровню: A1 и A2 делят один файл, C1 получает файл C1–C2
+const fileFor = async level => {
+  sent = [];
+  await call('/test', { ...testBody, level });
+  return new URL(sent[0].body.reply_markup.inline_keyboard[0][0].url).searchParams.get('text').match(/materials\/(\S+\.pdf)/)?.[1];
+};
+check('файл для A1 → A1-A2', await fileFor('A1') === 'howtosaydasha_Rekomendacii_A1-A2.pdf');
+check('файл для A2 → A1-A2', await fileFor('A2') === 'howtosaydasha_Rekomendacii_A1-A2.pdf');
+check('файл для B2 → B2', await fileFor('B2') === 'howtosaydasha_Rekomendacii_B2.pdf');
+check('файл для C1 → C1-C2', await fileFor('C1') === 'howtosaydasha_Rekomendacii_C1-C2.pdf');
+sent = [];
 const greetUrl = new URL(kb[1].url);
 const greetText = greetUrl.searchParams.get('text');
 check('кнопка 2: личка ученика + приветствие и вопрос про курс', greetUrl.pathname === '/anna_test' && greetText.includes('Здравствуйте, Анна!') && greetText.includes('На какой курс'), greetText);
