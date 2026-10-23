@@ -13,8 +13,7 @@
  *   BOT_TOKEN        секрет: токен бота от @BotFather
  *   OWNER_CHAT_ID    секрет: числовой Telegram ID получателей уведомлений, несколько
  *                    через запятую (123456789,987654321). Каждый должен нажать Start в боте
- *   WEBHOOK_SECRET   секрет: пароль, которым Telegram подписывает запросы к воркеру
- *   SETUP_KEY        секрет: ключ для разовой настройки (POST /setup)
+ *   SETUP_KEY        секрет: ключ для настройки и диагностики (POST /setup, POST /status)
  *   ALLOWED_ORIGINS  адрес сайта, например https://strangehul1-design.github.io
  *   SITE_URL         адрес сайта вместе с папкой, откуда берутся PDF,
  *                    например https://strangehul1-design.github.io/howtosaydasha-enroll
@@ -71,6 +70,14 @@ const owners = env => String(env.OWNER_CHAT_ID || '').split(',').map(s => s.trim
 const isOwner = (env, id) => owners(env).includes(String(id));
 const siteUrl = env => String(env.SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, '');
 const fileUrl = (env, level) => `${siteUrl(env)}/materials/${LEVEL_FILES[level]}`;
+
+/* Пароль, которым Telegram подписывает свои запросы к воркеру. Он считается из токена бота,
+   поэтому не нужен отдельный секрет и он всегда одинаков при повторной настройке. */
+async function webhookSecret(env) {
+  const bytes = new TextEncoder().encode(`${env.BOT_TOKEN}:htsd-webhook-v1`);
+  const hash = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 /* ── Telegram ── */
 async function tg(env, method, body) {
@@ -215,12 +222,17 @@ export default {
 
     // запросы от Telegram (без Origin, подписаны секретом)
     if (request.method === 'POST' && url.pathname === '/webhook') {
-      if (!env.WEBHOOK_SECRET || request.headers.get('X-Telegram-Bot-Api-Secret-Token') !== env.WEBHOOK_SECRET) {
+      const given = request.headers.get('X-Telegram-Bot-Api-Secret-Token') || '';
+      // принимаем и пароль из токена, и прежний WEBHOOK_SECRET (если он ещё задан)
+      const valid = !!env.BOT_TOKEN && !!given && (given === await webhookSecret(env) || given === env.WEBHOOK_SECRET);
+      if (!valid) {
+        console.warn('webhook rejected: wrong or missing secret');
         return json({ ok: false, error: 'forbidden' }, 401);
       }
       try {
         const update = await request.json();
         const result = update.callback_query ? await onCallback(env, update.callback_query) : await onMessage(env, update.message);
+        console.log('webhook', JSON.stringify(result));
         return json({ ok: true, ...result });
       } catch (e) {
         console.error('webhook error', e && e.stack || e);
@@ -231,14 +243,35 @@ export default {
     // разовая настройка: подключает бота к воркеру
     if (request.method === 'POST' && url.pathname === '/setup') {
       if (!env.SETUP_KEY || request.headers.get('X-Setup-Key') !== env.SETUP_KEY) return json({ ok: false, error: 'forbidden' }, 403);
-      if (!env.BOT_TOKEN || !env.WEBHOOK_SECRET) return json({ ok: false, error: 'not_configured' }, 500);
+      if (!env.BOT_TOKEN) return json({ ok: false, error: 'not_configured' }, 500);
       const hook = `${url.origin}/webhook`;
-      const set = await tg(env, 'setWebhook', { url: hook, secret_token: env.WEBHOOK_SECRET, allowed_updates: ['message', 'callback_query'], drop_pending_updates: true });
+      const set = await tg(env, 'setWebhook', { url: hook, secret_token: await webhookSecret(env), allowed_updates: ['message', 'callback_query'], drop_pending_updates: true });
       const me = await tg(env, 'getMe', {});
       const info = await tg(env, 'getWebhookInfo', {});
       const i = info.data.result || {};
       return json({ ok: set.ok, webhook: hook, bot: me.data.result?.username || null,
         info: { url: i.url, pending: i.pending_update_count, last_error: i.last_error_message || null } });
+    }
+
+    // диагностика: что видит Telegram (ничего не меняет)
+    if (request.method === 'POST' && url.pathname === '/status') {
+      if (!env.SETUP_KEY || request.headers.get('X-Setup-Key') !== env.SETUP_KEY) return json({ ok: false, error: 'forbidden' }, 403);
+      const me = await tg(env, 'getMe', {});
+      const info = await tg(env, 'getWebhookInfo', {});
+      const i = info.data.result || {};
+      return json({
+        ok: true,
+        bot: me.data.result?.username || null,
+        recipients: owners(env).length,
+        secrets: { BOT_TOKEN: !!env.BOT_TOKEN, OWNER_CHAT_ID: !!env.OWNER_CHAT_ID },
+        webhook: {
+          url: i.url || null,
+          pending: i.pending_update_count ?? null,
+          last_error_at: i.last_error_date ? new Date(i.last_error_date * 1000).toISOString() : null,
+          last_error: i.last_error_message || null,
+          allowed_updates: i.allowed_updates || null,
+        },
+      });
     }
 
     // заявки с сайта

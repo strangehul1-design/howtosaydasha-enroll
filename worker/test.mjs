@@ -8,10 +8,12 @@ const env = {
   OWNER_CHAT_ID: '12345, 67890',
   ALLOWED_ORIGINS: 'https://strangehul1-design.github.io',
   SITE_URL: SITE + '/',
-  WEBHOOK_SECRET: 'hook-secret',
   SETUP_KEY: 'setup-key',
 };
 const ORIGIN = 'https://strangehul1-design.github.io';
+// пароль вебхука считается из токена бота (тот же алгоритм, что в воркере)
+const SECRET = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${env.BOT_TOKEN}:htsd-webhook-v1`))
+  .then(h => [...new Uint8Array(h)].map(b => b.toString(16).padStart(2, '0')).join(''));
 
 let sent = [];
 let failing = new Set();
@@ -25,21 +27,22 @@ globalThis.fetch = async (url, init) => {
 const calls = method => sent.filter(s => s.method === method);
 const reset = () => { sent = []; failing = new Set(); };
 
-const hook = (update, secret = env.WEBHOOK_SECRET) =>
+const hook = (update, secret = SECRET, e = env) =>
   worker.fetch(new Request('https://worker.test/webhook', {
     method: 'POST', headers: { 'Content-Type': 'application/json', ...(secret ? { 'X-Telegram-Bot-Api-Secret-Token': secret } : {}) },
     body: JSON.stringify(update),
-  }), env);
+  }), e);
 const site = (path, body, { origin = ORIGIN, method = 'POST', raw, e = env } = {}) =>
   worker.fetch(new Request('https://worker.test' + path, {
     method, headers: { 'Content-Type': 'application/json', ...(origin ? { Origin: origin } : {}) },
     body: method === 'POST' ? (raw ?? JSON.stringify(body)) : undefined,
   }), e);
 
-console.error = () => {}; // ожидаемые ошибки в тестах не засоряют вывод
+const out = console.log.bind(console);
+console.error = console.warn = console.log = () => {}; // логи воркера не засоряют вывод тестов
 let failed = 0;
 const check = (name, ok, extra = '') => {
-  console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${ok ? '' : '  ' + extra}`);
+  out(`${ok ? 'PASS' : 'FAIL'}  ${name}${ok ? '' : '  ' + extra}`);
   if (!ok) failed++;
 };
 const buttons = body => (body?.reply_markup?.inline_keyboard ?? []).flat();
@@ -150,6 +153,9 @@ check('сообщения из групп игнорируются', sent.length
 reset();
 check('вебхук без секрета → 401', (await hook(startMsg('tB144400'), '')).status === 401 && sent.length === 0);
 check('вебхук с чужим секретом → 401', (await hook(startMsg('tB144400'), 'wrong')).status === 401 && sent.length === 0);
+r = await hook(startMsg('tB144400'), 'legacy', { ...env, WEBHOOK_SECRET: 'legacy' });
+check('прежний WEBHOOK_SECRET ещё принимается, если задан', r.status === 200);
+check('…а если не задан, не принимается', (await hook(startMsg('tB144400'), 'legacy')).status === 401);
 r = await hook(null);
 check('сломанный запрос не роняет вебхук (200)', r.status === 200);
 check('/setup с неверным ключом → 403', (await site('/setup', {}, { origin: '' , raw: '{}' }).then(x => x.status)) === 403);
@@ -157,7 +163,7 @@ reset();
 r = await worker.fetch(new Request('https://htsd.example.workers.dev/setup', { method: 'POST', headers: { 'X-Setup-Key': 'setup-key' } }), env);
 j = await r.json();
 const sw = calls('setWebhook')[0]?.body;
-check('/setup: подключает вебхук с секретом и нужными событиями', r.status === 200 && sw?.url === 'https://htsd.example.workers.dev/webhook' && sw.secret_token === 'hook-secret' && sw.allowed_updates.join() === 'message,callback_query', JSON.stringify(sw));
+check('/setup: подключает вебхук с секретом и нужными событиями', r.status === 200 && sw?.url === 'https://htsd.example.workers.dev/webhook' && sw.secret_token === SECRET && SECRET.length === 64 && sw.allowed_updates.join() === 'message,callback_query', JSON.stringify(sw));
 check('/setup: возвращает имя бота и состояние вебхука', j.bot === 'htsd_test_bot' && j.info.pending === 0, JSON.stringify(j));
 
 // ───────── заявка с сайта ─────────
@@ -193,5 +199,5 @@ r = await site('/enroll', { details: 'x'.repeat(20) });
 console.error = origError;
 check('ошибка Telegram при заявке → 502', r.status === 502);
 
-console.log(failed ? `\nПровалено проверок: ${failed}` : '\nВсе проверки пройдены');
+out(failed ? `\nПровалено проверок: ${failed}` : '\nВсе проверки пройдены');
 process.exit(failed ? 1 : 0);

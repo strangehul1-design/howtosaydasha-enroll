@@ -35,8 +35,7 @@
 |---|---|---|
 | `BOT_TOKEN` | токен бота от @BotFather | секрет Cloudflare |
 | `OWNER_CHAT_ID` | Telegram ID получателей, несколько через запятую | секрет Cloudflare |
-| `WEBHOOK_SECRET` | пароль, которым Telegram подписывает свои запросы к воркеру | секрет Cloudflare |
-| `SETUP_KEY` | ключ для разовой настройки (`POST /setup`) | секрет Cloudflare |
+| `SETUP_KEY` | ключ для настройки и диагностики (`POST /setup`, `POST /status`) | секрет Cloudflare |
 | `ALLOWED_ORIGINS`, `SITE_URL` | адрес сайта | `wrangler.toml` |
 
 > **Токен никогда не вставляйте** в `index.html`, README или другие файлы репозитория и не присылайте в чаты. Он нужен только как секрет воркера. Если токен попал куда-то лишний, в @BotFather выполните `/revoke` и задайте новый (команда ниже).
@@ -53,16 +52,26 @@ npx wrangler@4 secret put BOT_TOKEN
 
 1. Зарегистрируйтесь на [dash.cloudflare.com](https://dash.cloudflare.com) и войдите: `npx wrangler@4 login`.
 2. Разверните воркер: `npx wrangler@4 deploy` (в папке `worker`). Команда напечатает адрес вида `https://htsd-notify.<имя>.workers.dev`.
-3. Задайте четыре секрета из таблицы выше (`secret put`). Для `WEBHOOK_SECRET` и `SETUP_KEY` придумайте длинные случайные строки из латинских букв и цифр.
+3. Задайте три секрета из таблицы выше (`secret put`). Для `SETUP_KEY` придумайте длинную случайную строку из латинских букв и цифр.
 4. Подключите бота к воркеру одним запросом (подставьте свои адрес и ключ):
 
    ```bash
    curl -X POST https://htsd-notify.<имя>.workers.dev/setup -H "X-Setup-Key: <SETUP_KEY>"
    ```
 
-   В ответе будут имя бота и состояние подключения (`last_error` должен быть `null`).
+   В ответе будут имя бота и состояние подключения (`last_error` должен быть `null`). Пароль вебхука считается из токена бота, поэтому повторный запуск `/setup` всегда безопасен. После смены `BOT_TOKEN` подождите минуту и запустите его снова.
 5. Впишите адрес воркера в `NOTIFY_URL`, а имя бота (без `@`) в `BOT_USERNAME` в `index.html`.
 6. Каждый получатель нажимает **Start** в боте, иначе Telegram не даст боту ему писать.
+
+## Если уведомления не приходят
+
+Посмотрите, что видит Telegram:
+
+```bash
+curl -X POST https://htsd-notify.<имя>.workers.dev/status -H "X-Setup-Key: <SETUP_KEY>"
+```
+
+В ответе важны `webhook.last_error` (последняя ошибка доставки, например `401 Unauthorized`), `webhook.pending` (сколько сообщений ждут доставки) и `recipients` (сколько получателей настроено). Если `last_error` не пустой, выполните `/setup` ещё раз. Учтите: уведомление о тесте приходит только после того, как ученик нажал **Start** в боте.
 
 ## Защита
 
