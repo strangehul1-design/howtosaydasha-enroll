@@ -734,11 +734,9 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
                   desc: 'Персональная программа под ваши цели и уровень, расписание — как удобно вам.' },
     group:      { title: 'Групповые занятия',   ico: '👥', c: 'var(--mint)',  tint: '#D4F1E8', price: 25000,
                   fmt: '2 месяца, 2 занятия в неделю по 90 минут', unit: 'за 2 месяца',
-                  desc: 'Группы по уровням. Бонусные уроки разговорного клуба.' },
+                  desc: 'Группы по уровням.' },
     business:   { title: 'Бизнес-английский',   ico: '💼', c: 'var(--coral)', tint: '#FADDD3', lessons: 10, min: 60, price: 45000,
                   desc: 'Деловая лексика, презентации и переговоры для работы в международной среде.' },
-    club:       { title: 'SpeakingClub',        ico: '🎤', c: 'var(--tang)',  tint: '#FDE2C6', fmt: 'Старт 24.11',
-                  desc: 'Разговорная практика онлайн. Старт 24.11.' },
   };
   const LEVELS = { unknown: 'Не знаю, проверьте', start: 'С нуля', basic: 'Базовый (A1–A2)', mid: 'Средний (B1–B2)', adv: 'Продвинутый (C1+)' };
   const GOALS  = ['✈️ Путешествия', '💼 Работа и карьера', '🎓 Экзамены', '🏫 Школа', '💬 Разговорный барьер', '🌍 Переезд', '🎬 Для души'];
@@ -824,9 +822,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   /* ── Прайс-лист ── */
   function renderPriceList() {
     $('#priceList').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) => {
-      const price = p.price
-        ? `<div class="pb-price"><strong>${rub(p.price)}</strong><small>${p.lessons ? `${rub(Math.round(p.price / p.lessons))} за урок` : p.unit}</small>${p.offer ? `<span class="deal">${rub(p.offer.price)} ${p.offer.note}</span>` : ''}</div>`
-        : '<div class="pb-price"><strong class="soft">Назовём при записи</strong><small>Старт 24.11</small></div>';
+      const price = `<div class="pb-price"><strong>${rub(p.price)}</strong><small>${p.lessons ? `${rub(Math.round(p.price / p.lessons))} за урок` : p.unit}</small>${p.offer ? `<span class="deal">${rub(p.offer.price)} ${p.offer.note}</span>` : ''}</div>`;
       return `
       <li class="pb-row" style="--c:${p.c}">
         <div class="pb-main"><span class="ico" aria-hidden="true">${p.ico}</span><div><h3>${p.title}</h3><p>${p.desc}</p></div></div>
@@ -851,7 +847,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 
   function renderFields() {
     $('#programTiles').innerHTML = Object.entries(PROGRAMS).map(([pid, p]) =>
-      tile('program', pid, p.ico, p.c, p.tint, p.title, fmtOf(p), pid === 'club')).join('');
+      tile('program', pid, p.ico, p.c, p.tint, p.title, fmtOf(p))).join('');
     $('#age').insertAdjacentHTML('beforeend', Array.from({ length: 15 }, (_, i) => `<option value="${i + 4}">${i + 4} ${i + 4 < 5 ? 'года' : 'лет'}</option>`).join(''));
     $('#levelChips').innerHTML = Object.entries(LEVELS).map(([k, v]) => chip('radio', 'level', k, v)).join('');
     $('#goalChips').innerHTML = GOALS.map(g => chip('checkbox', 'goal', g, g)).join('');
@@ -885,7 +881,6 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   function quote(s) {
     if (!s.program) return { big: '—', sub: 'Выберите программу, и мы покажем цену' };
     const p = PROGRAMS[s.program];
-    if (!p.price) return { big: 'Назовём при записи', sub: 'SpeakingClub стартует 24.11' };
     let sub = p.lessons ? `${fmtOf(p)}, ${rub(Math.round(p.price / p.lessons))} за урок` : `${fmtOf(p)}`;
     if (p.offer) sub += `\nАкция: ${rub(p.offer.price)} ${p.offer.note}`;
     return { big: rub(p.price), sub };
@@ -953,7 +948,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     const p = PROGRAMS[s.program], q = quote(s);
     const contact = s.ctype === 'tg' ? '@' + tgNorm(s.contact) : s.contact;
     const L = [`Имя: ${s.name}`, `Связь: ${CTYPES[s.ctype].name}, ${contact}`, ''];
-    L.push(`Программа: ${p.title}${p.price ? ` (${fmtOf(p)})` : ' (старт 24.11)'}`);
+    L.push(`Программа: ${p.title} (${fmtOf(p)})`);
     if (s.program === 'kids' || s.program === 'kidsgroup') L.push(`Возраст ребёнка: ${s.age}`);
     L.push(`Уровень: ${LEVELS[s.level] || 'не указан'}`);
     if (testResult) L.push(`Результат теста: ${testResult.level}, ${testResult.total} из ${testResult.count}`);
