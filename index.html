@@ -419,10 +419,10 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
           <div class="bubble bubble-q"><small>How to say</small><strong id="bq">«Привет»?</strong></div>
           <div class="bubble bubble-a" id="ba">Hello!</div>
         </div>
-        <a class="sticker" href="#enroll" data-pick="program:club">
+        <a class="sticker" href="#enroll" data-pick="program:group">
           <small>Супер предложение</small>
-          <b>Speaking<br>Club</b>
-          <span>старт 24.11</span>
+          <b>Групповые<br>уроки</b>
+          <span>старт 03.11</span>
         </a>
       </div>
     </div>
@@ -728,6 +728,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
   const PROGRAMS = {
     kids:       { title: 'Детские занятия',     ico: '🧸', c: 'var(--sun)',   tint: '#FFF1C7', lessons: 10, min: 40, price: 20000,
                   desc: 'Дети 4–18 лет. Песни, игры и творчество. Помогаем с домашкой и работаем по запросу родителей.' },
+    kidsgroup:  { title: 'Группы для детей',     ico: '🎈', c: 'var(--sun)',   tint: '#FFF1C7', lessons: 8, min: 60, price: 10000,
+                  desc: 'Группа до 8 человек. Дети 4–18 лет.' },
     individual: { title: 'Индивидуальные',      ico: '🎯', c: 'var(--sky)',   tint: '#D9ECF8', lessons: 10, min: 45, price: 40000,
                   desc: 'Персональная программа под ваши цели и уровень, расписание — как удобно вам.' },
     group:      { title: 'Групповые занятия',   ico: '👥', c: 'var(--mint)',  tint: '#D4F1E8', price: 25000,
@@ -891,7 +893,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 
   function sync() {
     const s = read();
-    const kids = s.program === 'kids';
+    const kids = s.program === 'kids' || s.program === 'kidsgroup';
     $('#ageField').hidden = !kids;
 
     put('program', s.program ? PROGRAMS[s.program].title : '');
@@ -935,7 +937,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     const bad = [];
     const need = (ok, key, msg, focus) => { if (!ok) { errEl(key).textContent = msg; if (focus) focus.setAttribute('aria-invalid', 'true'); bad.push(focus || errEl(key)); } };
     need(!!s.program, 'program', 'Выберите программу, чтобы мы знали, чему учить', $('input[name="program"]'));
-    need(s.program !== 'kids' || s.age > 0, 'age', 'Укажите возраст ребёнка', $('#age'));
+    need(!(s.program === 'kids' || s.program === 'kidsgroup') || s.age > 0, 'age', 'Укажите возраст ребёнка', $('#age'));
     need(s.name.length >= 2, 'name', 'Напишите, как к вам обращаться', $('#name'));
     const digits = s.contact.replace(/\D/g, '');
     const okContact = s.ctype === 'email' ? /^\S+@\S+\.\S+$/.test(s.contact)
@@ -952,7 +954,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     const contact = s.ctype === 'tg' ? '@' + tgNorm(s.contact) : s.contact;
     const L = [`Имя: ${s.name}`, `Связь: ${CTYPES[s.ctype].name}, ${contact}`, ''];
     L.push(`Программа: ${p.title}${p.price ? ` (${fmtOf(p)})` : ' (старт 24.11)'}`);
-    if (s.program === 'kids') L.push(`Возраст ребёнка: ${s.age}`);
+    if (s.program === 'kids' || s.program === 'kidsgroup') L.push(`Возраст ребёнка: ${s.age}`);
     L.push(`Уровень: ${LEVELS[s.level] || 'не указан'}`);
     if (testResult) L.push(`Результат теста: ${testResult.level}, ${testResult.total} из ${testResult.count}`);
     if (s.goals.length) L.push(`Цели: ${s.goals.map(g => g.replace(/^\S+\s/, '')).join(', ')}`);
@@ -1023,7 +1025,8 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     qz.picks = Array(QUIZ.length).fill(null);
     qz.order = QUIZ.map(q => shuffle(q.o.map((_, k) => k)));
     renderQuestion();
-    if (!qdlg.open) qdlg.showModal();
+    // старые браузеры (например, Safari до 15.4) не знают showModal: открываем через атрибут
+    if (!qdlg.open) { if (qdlg.showModal) qdlg.showModal(); else qdlg.setAttribute('open', ''); }
   }
 
   function renderQuestion() {
