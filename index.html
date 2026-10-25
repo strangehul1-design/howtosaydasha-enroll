@@ -329,6 +329,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 .qz-send{display:grid;gap:14px;padding:22px;border-radius:24px;background:#fff;border:2px solid var(--ink)}
 .qz-send p{color:var(--muted);font-size:.98rem}
 .qz-after{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.qz-blur{filter:blur(7px);user-select:none;-webkit-user-select:none}
 
 /* ───────── адаптив ───────── */
 @media (max-width:1020px){
@@ -1064,14 +1065,14 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     const bars = QL.map(l => `<li style="--c:${QINFO[l].c};--p:${per[l][1] ? per[l][0] / per[l][1] * 100 : 0}%"><span>${l}</span><i></i><span>${per[l][0]}/${per[l][1]}</span></li>`).join('');
     qbody.innerHTML = `
       <div class="qz-res-head">
-        <div class="lv-badge" style="--c:${info.c}" aria-hidden="true">${level}</div>
-        <div><h2 class="qz-q" tabindex="-1">Ваш уровень — ${level}, ${info.name.toLowerCase()}</h2><p>${total} из ${QUIZ.length} правильных ответов</p></div>
+        <div class="lv-badge qz-blur" style="--c:${info.c}" aria-hidden="true">${level}</div>
+        <div><h2 class="qz-q" tabindex="-1">Ваш результат: <span class="qz-blur">${level}, ${total} из ${QUIZ.length}</span></h2><p>Чтобы узнать свой уровень, отправьте результат Дарье.</p></div>
       </div>
-      <p style="margin-top:18px">${info.text}</p>
-      <ul class="bars" style="margin-top:18px" aria-label="Результат по уровням">${bars}</ul>
+      <p class="qz-blur" style="margin-top:18px">${info.text}</p>
+      <ul class="bars qz-blur" style="margin-top:18px" aria-label="Результат по уровням">${bars}</ul>
       <form class="qz-send" id="qzSend" novalidate style="margin-top:22px">
-        <div><h3>Получите рекомендации для уровня ${level}</h3>
-        <p style="margin-top:6px">Оставьте Telegram: Дарья получит ваш результат и напишет вам с файлом, подобранным под ваш уровень.</p></div>
+        <div><h3>Отправьте результат Дарье</h3>
+        <p style="margin-top:6px">Оставьте Telegram: Дарья пришлёт ваш уровень и рекомендации с файлом, подобранным под него.</p></div>
         <div class="fields-2">
           <div class="field"><label for="qzName">Имя <span style="font-weight:400;color:var(--muted)">— по желанию</span></label><input class="input" id="qzName" name="name" autocomplete="given-name" placeholder="Как к вам обращаться"></div>
           <div class="field"><label for="qzTg">Ваш Telegram</label><input class="input" id="qzTg" name="tg" placeholder="@username" autocomplete="off"></div>
