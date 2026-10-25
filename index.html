@@ -330,6 +330,9 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 .qz-send p{color:var(--muted);font-size:.98rem}
 .qz-after{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
 .qz-blur{filter:blur(7px);user-select:none;-webkit-user-select:none}
+.meme{margin:0;display:grid;gap:12px}
+.meme-img{display:grid;place-items:center;min-height:150px;padding:16px;border-radius:20px;border:2px dashed var(--ink);background:#fff;color:var(--muted);text-align:center;font-size:.95rem}
+.meme-cap{font:700 clamp(1.15rem,3vw,1.45rem)/1.3 var(--text);letter-spacing:-.01em;text-wrap:balance}
 
 /* ───────── адаптив ───────── */
 @media (max-width:1020px){
@@ -750,29 +753,22 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     email: { label: 'Почта',    ph: 'name@mail.ru',     type: 'email', name: 'Почта' },
   };
 
-  /* ── Данные: тест уровня (по 4 вопроса на каждый уровень, o[0] — верный ответ,
-        порядок вариантов при показе перемешивается) ── */
+  /* ── Данные: тест уровня, 12 карточек-мемов. Картинки и привязка к уровням пока
+        условные (заглушки): их заменят при выкладке. o[0] — верный ответ,
+        порядок вариантов при показе перемешивается ── */
   const QUIZ = [
-    { l: 'A1', q: 'She ___ a teacher.',                         o: ['is', 'are', 'am', 'be'] },
-    { l: 'A1', q: 'I ___ coffee every morning.',                o: ['drink', 'drinks', 'am drink', 'drinking'] },
-    { l: 'A1', q: 'How ___ brothers do you have?',              o: ['many', 'much', 'long', 'old'] },
-    { l: 'A1', q: 'There ___ two books on the table.',          o: ['are', 'is', 'am', 'be'] },
-    { l: 'A2', q: 'Yesterday we ___ to the cinema.',            o: ['went', 'go', 'goes', 'gone'] },
-    { l: 'A2', q: 'My brother is ___ than me.',                 o: ['taller', 'more tall', 'tallest', 'the taller'] },
-    { l: 'A2', q: 'What ___ you doing at the moment?',          o: ['are', 'do', 'is', 'did'] },
-    { l: 'A2', q: 'We ___ have a car, so we take the bus.',     o: ['don’t', 'doesn’t', 'aren’t', 'isn’t'] },
-    { l: 'B1', q: 'If it rains tomorrow, we ___ at home.',      o: ['will stay', 'would stay', 'stayed', 'had stayed'] },
-    { l: 'B1', q: 'I have lived in this city ___ 2015.',        o: ['since', 'for', 'from', 'during'] },
-    { l: 'B1', q: 'This book ___ by millions of people around the world.', o: ['has been read', 'has read', 'is reading', 'reads'] },
-    { l: 'B1', q: 'You ___ wear a seatbelt. It’s the law.',     o: ['must', 'can', 'may', 'might'] },
-    { l: 'B2', q: 'I wish I ___ more free time.',               o: ['had', 'have', 'would have', 'will have'] },
-    { l: 'B2', q: 'By the time we arrived, the film ___.',      o: ['had already started', 'has already started', 'was already starting', 'already starts'] },
-    { l: 'B2', q: 'He denied ___ the window.',                  o: ['breaking', 'to break', 'break', 'broke'] },
-    { l: 'B2', q: 'Not only ___ late, but he also forgot the documents.', o: ['was he', 'he was', 'did he be', 'were he'] },
-    { l: 'C1', q: 'The minister was widely criticised, but she refused to ___.', o: ['back down', 'back in', 'come up', 'set off'] },
-    { l: 'C1', q: 'Hardly ___ the office when it started to rain.', o: ['had she left', 'she had left', 'did she leave', 'she has left'] },
-    { l: 'C1', q: 'Her speech was so ___ that many people in the audience were moved to tears.', o: ['poignant', 'pungent', 'plausible', 'petulant'] },
-    { l: 'C1', q: 'I’d rather you ___ anything about it to anyone.', o: ['didn’t say', 'don’t say', 'won’t say', 'not say'] },
+    { l: 'B1', img: 'Уверенная девушка в очках, будто знает пять языков, но только заказала кофе в Starbucks', cap: 'My English is perfect until someone actually talks to me.', q: 'What is she trying to say?', o: ['Her English is only good when nobody talks to her', 'She speaks five languages', 'She ordered coffee in English', 'Her English is always perfect'] },
+    { l: 'A2', img: 'Девушка, которая состарилась, пока ждёт подругу', cap: 'I’ve been waiting for you for 84 years.', q: 'What is she saying?', o: ['She has been waiting a very long time', 'She is 84 years old', 'She is waiting for her boss', 'She likes waiting'] },
+    { l: 'A1', img: 'Девушка с кучей пакетов и пустой банковской картой', cap: 'My bank account after one little shopping trip.', q: 'What does the caption mean?', o: ['She spent all her money shopping', 'She has a big bank account', 'She went to the bank', 'She saved money'] },
+    { l: 'B2', img: 'Девушка смотрит на телефон в ожидании сообщения', cap: 'Have we met before, or have I just stalked your Instagram?', q: 'What does she mean?', o: ['She looked at his profile online before meeting', 'They have met many times', 'She wants to meet at the bank', 'She is asking for his phone number'] },
+    { l: 'A2', img: 'Девушка на яхте, на Бали или у бассейна с коктейлем', cap: 'If I were rich, you would never see me again.', q: 'What does she mean?', o: ['She would leave if she had a lot of money', 'She is rich already', 'She will see him tomorrow', 'She is looking for money'] },
+    { l: 'C1', img: 'Девушка с лицом Миранды Пристли из «Дьявол носит Prada»', cap: 'My ex: I miss you. Me: Interesting.', q: 'What is the joke?', o: ['She is not interested in her ex coming back', 'She misses her ex too', 'She agrees with her ex', 'Her ex is interesting'] },
+    { l: 'B1', img: 'Уставшая девушка, которую подруга три часа грузит историями', cap: 'I’ve been listening to this drama since lunch.', q: 'What does she mean?', o: ['She has been hearing a long story for hours', 'She ate lunch with the drama club', 'She is listening to music', 'The drama started at lunch'] },
+    { l: 'A1', img: 'Девушка, которая смеётся так сильно, что не может дышать', cap: 'When the joke is so funny you literally die.', q: 'What is she saying?', o: ['The joke made her laugh very hard', 'She is in danger', 'She did not hear the joke', 'The joke was bad'] },
+    { l: 'A2', img: 'Две подруги смотрят на пустые кошельки', cap: 'Neither can I. Let’s be poor together.', q: 'What does she mean?', o: ['She has no money either', 'She wants to be rich', 'She agrees to pay', 'She does not want to go out'] },
+    { l: 'B2', img: 'Растерянное лицо Майкла Скотта из «Офиса»', cap: 'When your boss says: Let’s think outside the box.', q: 'What does the boss mean?', o: ['Let’s find new, creative ideas', 'Let’s stay in the office', 'Let’s go outside', 'Let’s use a box'] },
+    { l: 'C1', img: 'Уверенная девушка в деловом образе', cap: 'She has a way with words.', q: 'What does it mean?', o: ['She is very good at speaking and persuading', 'She writes bad words', 'She has a box of words', 'She speaks slowly'] },
+    { l: 'C1', img: 'Героиня с максимально надменным выражением лица', cap: 'I don’t want to sound arrogant, but I’m literally the best.', q: 'What is the joke?', o: ['She is being ironic and very proud', 'She is humble', 'She is apologising', 'She is asking for help'] },
   ];
   const QL = ['A1', 'A2', 'B1', 'B2', 'C1'];
   const QINFO = {
@@ -782,7 +778,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     B2: { name: 'Выше среднего', c: 'var(--sky)',   text: 'Вы свободно общаетесь на знакомые темы. Дальше работаем над точностью, богатой лексикой и уверенностью на переговорах.' },
     C1: { name: 'Продвинутый',   c: 'var(--mint)',  text: 'Вы свободно выражаете мысли в работе и учёбе. Шлифуем нюансы, идиомы и стиль.' },
   };
-  const levelFor = n => (n <= 4 ? 'A1' : n <= 8 ? 'A2' : n <= 12 ? 'B1' : n <= 16 ? 'B2' : 'C1');
+  const levelFor = n => (n <= 3 ? 'A1' : n <= 5 ? 'A2' : n <= 7 ? 'B1' : n <= 9 ? 'B2' : 'C1');
   const FORM_LEVEL = { A1: 'start', A2: 'basic', B1: 'mid', B2: 'mid', C1: 'adv' };
 
   /* ── Общие помощники ── */
@@ -1031,6 +1027,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     setProgress(qz.i);
     const opts = qz.order[qz.i].map(k => `<label class="qz-opt"><input type="radio" name="qa" value="${k}"${picked === k ? ' checked' : ''}><span>${esc(q.o[k])}</span></label>`).join('');
     qbody.innerHTML = `
+      ${q.img ? `<figure class="meme"><div class="meme-img" role="img" aria-label="${esc(q.img)}">${esc(q.img)}</div><figcaption class="meme-cap">${esc(q.cap)}</figcaption></figure>` : ''}
       <h2 class="qz-q" tabindex="-1">${esc(q.q).replace('___', '<span class="blank"></span><span class="sr-only">пропуск</span>')}</h2>
       <fieldset class="qz-opts" style="margin-top:22px"><legend class="sr-only">Варианты ответа</legend>${opts}
         <label class="qz-opt qz-skip"><input type="radio" name="qa" value="-1"${picked === -1 ? ' checked' : ''}><span>Не знаю</span></label>
