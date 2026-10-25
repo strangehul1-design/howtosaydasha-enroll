@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img">
+<rect width="400" height="300" fill="#FDEBF0"/>
+
+<path d="M148 226 L154 152 Q190 126 226 152 L232 226 Z" fill="#E63946" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/><circle cx="190" cy="54" r="14" fill="#2B1D16"/><path d="M156 100 Q154 60 190 64 Q226 60 224 100 Q216 82 190 78 Q164 82 156 100 Z" fill="#2B1D16"/><circle cx="190" cy="100" r="30" fill="#F5C9A5"/><path d="M172 98 q6 5 12 0 M196 98 q6 5 12 0" stroke="#0D1216" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M182 114 Q194 118 202 110" stroke="#0D1216" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M168 66 L176 44 L190 58 L204 44 L212 66 Z" fill="#FFD23F" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/>
+<rect x="248" y="40" width="130" height="46" rx="16" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/>
+<text x="313" y="69.66666666666667" font-family="Arial, sans-serif" font-weight="700" font-size="20" text-anchor="middle" fill="#0D1216">the best</text>
+
+</svg>

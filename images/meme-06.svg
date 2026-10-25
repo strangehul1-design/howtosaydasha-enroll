@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img">
+<rect width="400" height="300" fill="#F2F2F2"/>
+
+<path d="M78 226 L84 152 Q120 126 156 152 L162 226 Z" fill="#0D1216" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/><path d="M86 106 Q82 60 120 64 Q158 60 154 106 Q150 84 120 80 Q90 84 86 106 Z" fill="#2B1D16"/><circle cx="120" cy="100" r="30" fill="#F5C9A5"/><circle cx="108" cy="98" r="3.5" fill="#0D1216"/><circle cx="132" cy="98" r="3.5" fill="#0D1216"/><path d="M111 114 L129 114" stroke="#0D1216" stroke-width="3" stroke-linecap="round"/>
+<rect x="190" y="30" width="180" height="50" rx="16" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/>
+<text x="280" y="62.333333333333336" font-family="Arial, sans-serif" font-weight="700" font-size="22" text-anchor="middle" fill="#0D1216">I miss you</text>
+<rect x="210" y="110" width="150" height="50" rx="16" fill="#FF6B9D" stroke="#0D1216" stroke-width="3"/>
+<text x="285" y="142.33333333333334" font-family="Arial, sans-serif" font-weight="700" font-size="22" text-anchor="middle" fill="#0D1216">Interesting.</text>
+
+</svg>

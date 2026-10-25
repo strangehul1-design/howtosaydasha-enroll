@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img">
+<rect width="400" height="300" fill="#E9F9EE"/>
+
+<path d="M88 226 L94 152 Q130 126 166 152 L172 226 Z" fill="#FFB38A" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/><path d="M96 106 Q92 60 130 64 Q168 60 164 106 Q160 84 130 80 Q100 84 96 106 Z" fill="#7A3B1E"/><circle cx="130" cy="100" r="30" fill="#F5C9A5"/><circle cx="118" cy="98" r="3.5" fill="#0D1216"/><circle cx="142" cy="98" r="3.5" fill="#0D1216"/><path d="M121 114 L139 114" stroke="#0D1216" stroke-width="3" stroke-linecap="round"/>
+<path d="M228 226 L234 152 Q270 126 306 152 L312 226 Z" fill="#7C6BD6" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/><circle cx="270" cy="54" r="14" fill="#2B1D16"/><path d="M236 100 Q234 60 270 64 Q306 60 304 100 Q296 82 270 78 Q244 82 236 100 Z" fill="#2B1D16"/><circle cx="270" cy="100" r="30" fill="#F5C9A5"/><circle cx="258" cy="98" r="3.5" fill="#0D1216"/><circle cx="282" cy="98" r="3.5" fill="#0D1216"/><path d="M261 114 L279 114" stroke="#0D1216" stroke-width="3" stroke-linecap="round"/>
+<g transform="rotate(-6 130 217)"><rect x="100" y="200" width="60" height="34" rx="4" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/></g>
+<g transform="rotate(6 270 217)"><rect x="240" y="200" width="60" height="34" rx="4" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/></g>
+<rect x="150" y="20" width="100" height="36" rx="16" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/>
+<text x="200" y="44" font-family="Arial, sans-serif" font-weight="700" font-size="18" text-anchor="middle" fill="#0D1216">broke</text>
+
+</svg>

@@ -331,7 +331,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
 .qz-after{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
 .qz-blur{filter:blur(7px);user-select:none;-webkit-user-select:none}
 .meme{margin:0;display:grid;gap:12px}
-.meme-img{display:grid;place-items:center;min-height:150px;padding:16px;border-radius:20px;border:2px dashed var(--ink);background:#fff;color:var(--muted);text-align:center;font-size:.95rem}
+.meme-img{display:block;width:100%;height:auto;aspect-ratio:4/3;border-radius:20px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
 .meme-cap{font:700 clamp(1.15rem,3vw,1.45rem)/1.3 var(--text);letter-spacing:-.01em;text-wrap:balance}
 
 /* ───────── адаптив ───────── */
@@ -757,18 +757,18 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
         условные (заглушки): их заменят при выкладке. o[0] — верный ответ,
         порядок вариантов при показе перемешивается ── */
   const QUIZ = [
-    { l: 'B1', img: 'Уверенная девушка в очках, будто знает пять языков, но только заказала кофе в Starbucks', cap: 'My English is perfect until someone actually talks to me.', q: 'What is she trying to say?', o: ['Her English is only good when nobody talks to her', 'She speaks five languages', 'She ordered coffee in English', 'Her English is always perfect'] },
-    { l: 'A2', img: 'Девушка, которая состарилась, пока ждёт подругу', cap: 'I’ve been waiting for you for 84 years.', q: 'What is she saying?', o: ['She has been waiting a very long time', 'She is 84 years old', 'She is waiting for her boss', 'She likes waiting'] },
-    { l: 'A1', img: 'Девушка с кучей пакетов и пустой банковской картой', cap: 'My bank account after one little shopping trip.', q: 'What does the caption mean?', o: ['She spent all her money shopping', 'She has a big bank account', 'She went to the bank', 'She saved money'] },
-    { l: 'B2', img: 'Девушка смотрит на телефон в ожидании сообщения', cap: 'Have we met before, or have I just stalked your Instagram?', q: 'What does she mean?', o: ['She looked at his profile online before meeting', 'They have met many times', 'She wants to meet at the bank', 'She is asking for his phone number'] },
-    { l: 'A2', img: 'Девушка на яхте, на Бали или у бассейна с коктейлем', cap: 'If I were rich, you would never see me again.', q: 'What does she mean?', o: ['She would leave if she had a lot of money', 'She is rich already', 'She will see him tomorrow', 'She is looking for money'] },
-    { l: 'C1', img: 'Девушка с лицом Миранды Пристли из «Дьявол носит Prada»', cap: 'My ex: I miss you. Me: Interesting.', q: 'What is the joke?', o: ['She is not interested in her ex coming back', 'She misses her ex too', 'She agrees with her ex', 'Her ex is interesting'] },
-    { l: 'B1', img: 'Уставшая девушка, которую подруга три часа грузит историями', cap: 'I’ve been listening to this drama since lunch.', q: 'What does she mean?', o: ['She has been hearing a long story for hours', 'She ate lunch with the drama club', 'She is listening to music', 'The drama started at lunch'] },
-    { l: 'A1', img: 'Девушка, которая смеётся так сильно, что не может дышать', cap: 'When the joke is so funny you literally die.', q: 'What is she saying?', o: ['The joke made her laugh very hard', 'She is in danger', 'She did not hear the joke', 'The joke was bad'] },
-    { l: 'A2', img: 'Две подруги смотрят на пустые кошельки', cap: 'Neither can I. Let’s be poor together.', q: 'What does she mean?', o: ['She has no money either', 'She wants to be rich', 'She agrees to pay', 'She does not want to go out'] },
-    { l: 'B2', img: 'Растерянное лицо Майкла Скотта из «Офиса»', cap: 'When your boss says: Let’s think outside the box.', q: 'What does the boss mean?', o: ['Let’s find new, creative ideas', 'Let’s stay in the office', 'Let’s go outside', 'Let’s use a box'] },
-    { l: 'C1', img: 'Уверенная девушка в деловом образе', cap: 'She has a way with words.', q: 'What does it mean?', o: ['She is very good at speaking and persuading', 'She writes bad words', 'She has a box of words', 'She speaks slowly'] },
-    { l: 'C1', img: 'Героиня с максимально надменным выражением лица', cap: 'I don’t want to sound arrogant, but I’m literally the best.', q: 'What is the joke?', o: ['She is being ironic and very proud', 'She is humble', 'She is apologising', 'She is asking for help'] },
+    { l: 'B1', pic: 'images/meme-01.svg', img: 'Уверенная девушка в очках, будто знает пять языков, но только заказала кофе в Starbucks', cap: 'My English is perfect until someone actually talks to me.', q: 'What is she trying to say?', o: ['Her English is only good when nobody talks to her', 'She speaks five languages', 'She ordered coffee in English', 'Her English is always perfect'] },
+    { l: 'A2', pic: 'images/meme-02.svg', img: 'Девушка, которая состарилась, пока ждёт подругу', cap: 'I’ve been waiting for you for 84 years.', q: 'What is she saying?', o: ['She has been waiting a very long time', 'She is 84 years old', 'She is waiting for her boss', 'She likes waiting'] },
+    { l: 'A1', pic: 'images/meme-03.svg', img: 'Девушка с кучей пакетов и пустой банковской картой', cap: 'My bank account after one little shopping trip.', q: 'What does the caption mean?', o: ['She spent all her money shopping', 'She has a big bank account', 'She went to the bank', 'She saved money'] },
+    { l: 'B2', pic: 'images/meme-04.svg', img: 'Девушка смотрит на телефон в ожидании сообщения', cap: 'Have we met before, or have I just stalked your Instagram?', q: 'What does she mean?', o: ['She looked at his profile online before meeting', 'They have met many times', 'She wants to meet at the bank', 'She is asking for his phone number'] },
+    { l: 'A2', pic: 'images/meme-05.svg', img: 'Девушка на яхте, на Бали или у бассейна с коктейлем', cap: 'If I were rich, you would never see me again.', q: 'What does she mean?', o: ['She would leave if she had a lot of money', 'She is rich already', 'She will see him tomorrow', 'She is looking for money'] },
+    { l: 'C1', pic: 'images/meme-06.svg', img: 'Девушка с лицом Миранды Пристли из «Дьявол носит Prada»', cap: 'My ex: I miss you. Me: Interesting.', q: 'What is the joke?', o: ['She is not interested in her ex coming back', 'She misses her ex too', 'She agrees with her ex', 'Her ex is interesting'] },
+    { l: 'B1', pic: 'images/meme-07.svg', img: 'Уставшая девушка, которую подруга три часа грузит историями', cap: 'I’ve been listening to this drama since lunch.', q: 'What does she mean?', o: ['She has been hearing a long story for hours', 'She ate lunch with the drama club', 'She is listening to music', 'The drama started at lunch'] },
+    { l: 'A1', pic: 'images/meme-08.svg', img: 'Девушка, которая смеётся так сильно, что не может дышать', cap: 'When the joke is so funny you literally die.', q: 'What is she saying?', o: ['The joke made her laugh very hard', 'She is in danger', 'She did not hear the joke', 'The joke was bad'] },
+    { l: 'A2', pic: 'images/meme-09.svg', img: 'Две подруги смотрят на пустые кошельки', cap: 'Neither can I. Let’s be poor together.', q: 'What does she mean?', o: ['She has no money either', 'She wants to be rich', 'She agrees to pay', 'She does not want to go out'] },
+    { l: 'B2', pic: 'images/meme-10.svg', img: 'Растерянное лицо Майкла Скотта из «Офиса»', cap: 'When your boss says: Let’s think outside the box.', q: 'What does the boss mean?', o: ['Let’s find new, creative ideas', 'Let’s stay in the office', 'Let’s go outside', 'Let’s use a box'] },
+    { l: 'C1', pic: 'images/meme-11.svg', img: 'Уверенная девушка в деловом образе', cap: 'She has a way with words.', q: 'What does it mean?', o: ['She is very good at speaking and persuading', 'She writes bad words', 'She has a box of words', 'She speaks slowly'] },
+    { l: 'C1', pic: 'images/meme-12.svg', img: 'Героиня с максимально надменным выражением лица', cap: 'I don’t want to sound arrogant, but I’m literally the best.', q: 'What is the joke?', o: ['She is being ironic and very proud', 'She is humble', 'She is apologising', 'She is asking for help'] },
   ];
   const QL = ['A1', 'A2', 'B1', 'B2', 'C1'];
   const QINFO = {
@@ -1027,7 +1027,7 @@ dialog::backdrop{background:rgba(13,18,22,.55);backdrop-filter:blur(4px)}
     setProgress(qz.i);
     const opts = qz.order[qz.i].map(k => `<label class="qz-opt"><input type="radio" name="qa" value="${k}"${picked === k ? ' checked' : ''}><span>${esc(q.o[k])}</span></label>`).join('');
     qbody.innerHTML = `
-      ${q.img ? `<figure class="meme"><div class="meme-img" role="img" aria-label="${esc(q.img)}">${esc(q.img)}</div><figcaption class="meme-cap">${esc(q.cap)}</figcaption></figure>` : ''}
+      ${q.pic ? `<figure class="meme"><img class="meme-img" src="${q.pic}" alt="${esc(q.img)}" width="400" height="300"><figcaption class="meme-cap">${esc(q.cap)}</figcaption></figure>` : ''}
       <h2 class="qz-q" tabindex="-1">${esc(q.q).replace('___', '<span class="blank"></span><span class="sr-only">пропуск</span>')}</h2>
       <fieldset class="qz-opts" style="margin-top:22px"><legend class="sr-only">Варианты ответа</legend>${opts}
         <label class="qz-opt qz-skip"><input type="radio" name="qa" value="-1"${picked === -1 ? ' checked' : ''}><span>Не знаю</span></label>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img">
+<rect width="400" height="300" fill="#F0EFFA"/>
+
+<path d="M158 246 L164 172 Q200 146 236 172 L242 246 Z" fill="#4DB6E8" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/><circle cx="200" cy="122" r="30" fill="#F5C9A5"/><circle cx="188" cy="120" r="3.5" fill="#0D1216"/><circle cx="212" cy="120" r="3.5" fill="#0D1216"/><path d="M191 136 L209 136" stroke="#0D1216" stroke-width="3" stroke-linecap="round"/>
+<rect x="160" y="50" width="80" height="62" rx="4" fill="#D9A441" stroke="#0D1216" stroke-width="3"/>
+<path d="M160 70 H240" stroke="#0D1216" stroke-width="3"/>
+<path d="M200 50 V70" stroke="#0D1216" stroke-width="3"/>
+<rect x="250" y="16" width="140" height="56" rx="16" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/>
+<text x="320" y="49.333333333333336" font-family="Arial, sans-serif" font-weight="700" font-size="16" text-anchor="middle" fill="#0D1216">think outside</text>
+
+</svg>

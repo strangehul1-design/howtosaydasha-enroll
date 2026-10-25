@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img">
+<rect width="400" height="300" fill="#EDE7FF"/>
+
+<path d="M148 226 L154 152 Q190 126 226 152 L232 226 Z" fill="#7C6BD6" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/><path d="M156 106 Q152 60 190 64 Q228 60 224 106 Q220 84 190 80 Q160 84 156 106 Z" fill="#2B1D16"/><circle cx="190" cy="100" r="30" fill="#F5C9A5"/><circle cx="178" cy="98" r="3.5" fill="#0D1216"/><circle cx="202" cy="98" r="3.5" fill="#0D1216"/><path d="M181 114 L199 114" stroke="#0D1216" stroke-width="3" stroke-linecap="round"/>
+<rect x="250" y="160" width="46" height="78" rx="8" fill="#0D1216"/>
+<rect x="256" y="170" width="34" height="58" rx="3" fill="#BFE6FF"/>
+<path d="M266 226 h14" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+<path d="M280 180 l20 -8" stroke="#E63946" stroke-width="4" stroke-linecap="round"/>
+<rect x="228" y="36" width="60" height="46" rx="16" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/>
+<text x="258" y="70.33333333333333" font-family="Arial, sans-serif" font-weight="700" font-size="34" text-anchor="middle" fill="#0D1216">?</text>
+
+</svg>

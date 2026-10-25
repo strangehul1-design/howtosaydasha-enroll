@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img">
+<rect width="400" height="300" fill="#FFF6E5"/>
+
+<path d="M116 230 L122 152 Q160 126 198 152 L204 230 Z" fill="#0D1216" stroke="#0D1216" stroke-width="3" stroke-linejoin="round"/><path d="M126 106 Q122 60 160 64 Q198 60 194 106 Q190 84 160 80 Q130 84 126 106 Z" fill="#7A3B1E"/><circle cx="160" cy="100" r="30" fill="#F5C9A5"/><circle cx="148" cy="98" r="3.5" fill="#0D1216"/><circle cx="172" cy="98" r="3.5" fill="#0D1216"/><path d="M150 112 Q160 120 170 112" stroke="#0D1216" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M140 150 L160 176 L180 150" fill="#FFFFFF" stroke="#0D1216" stroke-width="2"/>
+<path d="M250 40 l6 16 l16 6 l-16 6 l-6 16 l-6 -16 l-16 -6 l16 -6 z" fill="#FFD23F" stroke="#0D1216" stroke-width="2"/>
+<rect x="230" y="110" width="96" height="40" rx="16" fill="#FFFFFF" stroke="#0D1216" stroke-width="3"/>
+<text x="278" y="136.66666666666666" font-family="Arial, sans-serif" font-weight="700" font-size="20" text-anchor="middle" fill="#0D1216">Wow</text>
+<rect x="300" y="170" width="84" height="40" rx="16" fill="#FF6B9D" stroke="#0D1216" stroke-width="3"/>
+<text x="342" y="196.66666666666666" font-family="Arial, sans-serif" font-weight="700" font-size="20" text-anchor="middle" fill="#0D1216">Yes!</text>
+
+</svg>
